@@ -1,0 +1,37 @@
+api_platform:
+    title: Devis API
+    version: 1.0.0
+    defaults:
+        stateless: true
+        cache_headers:
+            vary: ['Content-Type', 'Authorization', 'Origin']
+    #added from default config *****************************
+    description: 'A Symfony API to manage your quotations'
+    mapping:
+        paths: [ '%kernel.project_dir%/src/Entity' ]
+    patch_formats:
+        json: [ 'application/merge-patch+json' ]
+    swagger:
+        versions: [ 3 ]
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header
+    formats:
+        jsonld: [ 'application/ld+json' ]
+        jsonhal: [ 'application/hal+json' ]
+        jsonapi: [ 'application/vnd.api+json' ]
+        json: [ 'application/json' ]
+        xml: [ 'application/xml', 'text/xml' ]
+        yaml: [ 'application/x-yaml' ]
+        csv: [ 'text/csv' ]
+        html: [ 'text/html' ]
+        geojson: [ 'application/vnd.geo+json' ]
+        jsonpatch: [ 'application/json-patch+json' ]
+        pdf: [ 'application/pdf' ]
+        jwt:
+            mime_types:
+                - "application/jwt"
+    http_cache:
+        invalidation:
+            enabled: false
