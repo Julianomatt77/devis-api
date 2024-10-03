@@ -16,7 +16,7 @@ lexik_jwt_authentication:
         signature_algorithm: RS256
 
     api_platform:
-        check_path: /api/login_check
+        check_path: /login_check
         username_path: username
         password_path: password
 
