@@ -19,8 +19,8 @@ api_platform:
                 type: header
     formats:
         jsonld: [ 'application/ld+json' ]
-        jsonhal: [ 'application/hal+json' ]
-        jsonapi: [ 'application/vnd.api+json' ]
+#        jsonhal: [ 'application/hal+json' ]
+#        jsonapi: [ 'application/vnd.api+json' ]
         json: [ 'application/json' ]
         xml: [ 'application/xml', 'text/xml' ]
         yaml: [ 'application/x-yaml' ]
