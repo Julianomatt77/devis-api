@@ -4,4 +4,4 @@ controllers:
         namespace: App\Controller
     type: attribute
 api_login_check:
-    path: /api/login_check
+    path: /login_check

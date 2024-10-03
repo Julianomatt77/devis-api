@@ -69,7 +69,7 @@ lexik_jwt_authentication:
                 - signature
 
     # remove the token from the response body when using cookies
-    remove_token_from_body_when_cookies_used: true
+    remove_token_from_body_when_cookies_used: false
 
     # invalidate the token on logout by storing it in the cache
     blocklist_token:
