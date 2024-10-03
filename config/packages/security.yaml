@@ -4,14 +4,35 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+
+#        app_user_provider:
+#            entity:
+#                class: App\Entity\User
+#                property: email
     firewalls:
+#        login:
+#            pattern: ^/api/login
+#            stateless: true
+#            json_login:
+#                check_path: /api/login_check
+#                success_handler: lexik_jwt_authentication.handler.authentication_success
+#                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+#        api:
+#            pattern: ^/api
+#            stateless: true
+#            jwt: ~ # enables the jwt authenticator
+
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
-            provider: users_in_memory
+            provider: app_user_provider
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -22,7 +43,16 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/api/register, roles: PUBLIC_ACCESS }
+         - { path: ^/api/login, roles: PUBLIC_ACCESS }
+         - { path: ^/api/adresses,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/clients,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/devis,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/elements,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/entreprises,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/prestations,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api,       roles: PUBLIC_ACCESS }
+         - { path: ^, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
