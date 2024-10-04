@@ -5,7 +5,9 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use App\Controller\PasswordResetController;
 use App\Controller\UserController;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,6 +24,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(uriTemplate: '/users-infos', controller: UserController::class, denormalizationContext: ['groups' => ['user:read']], name: 'app_user_show'),
         new Post(uriTemplate: '/register', controller: UserController::class, denormalizationContext: ['groups' => ['user:write']], name: 'api_register'),
         new Delete(uriTemplate: '/user-delete', controller: UserController::class, denormalizationContext: ['groups' => ['user:write']], name: 'app_user_delete'),
+        new Post(uriTemplate: '/password/forgot', controller: PasswordResetController::class, denormalizationContext: ['groups' => ['email:write']], name: 'password_forgot'),
+        new Patch(uriTemplate: '/password/reset/{token}', controller: PasswordResetController::class, denormalizationContext: ['groups' => ['password:write']], name: 'password_reset'),
     ],
     formats: ["json"],
 )]
@@ -38,7 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:write', 'user:read'])]
+    #[Groups(['user:write', 'user:read', 'email:write'])]
     private ?string $email = null;
 
     /**
@@ -49,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:write'])]
+    #[Groups(['user:write', 'password:write'])]
     private ?string $password = null;
 
     #[ORM\Column(nullable: true)]
@@ -70,6 +74,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Devis::class, mappedBy: 'user')]
     #[Groups(['user:read'])]
     private Collection $devis;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $tokenExpiryDate = null;
 
     public function __construct()
     {
@@ -227,5 +234,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getTokenExpiryDate(): ?\DateTimeImmutable
+    {
+        return $this->tokenExpiryDate;
+    }
+
+    public function setTokenExpiryDate(?\DateTimeImmutable $tokenExpiryDate): static
+    {
+        $this->tokenExpiryDate = $tokenExpiryDate;
+
+        return $this;
     }
 }
