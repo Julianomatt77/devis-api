@@ -18,19 +18,15 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class UserController extends AbstractController
 {
-    private $em;
-    private $userRepository;
-    private $jwtManager;
-    private $tokenStorageInterface;
-    private $annuaire;
+    private EntityManagerInterface $em;
+    private UserRepository $userRepository;
+    private AnnuaireService $annuaire;
+    private UserPasswordHasherInterface $userPasswordHasher;
 
-
-    public function __construct(TokenStorageInterface $tokenStorageInterface, JWTTokenManagerInterface $jwtManager, EntityManagerInterface $manager, UserRepository $userRepository, AnnuaireService $annuaire, UserPasswordHasherInterface $userPasswordHasher)
+    public function __construct(EntityManagerInterface $manager, UserRepository $userRepository, AnnuaireService $annuaire, UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->em   = $manager;
         $this->userRepository = $userRepository;
-        $this->jwtManager = $jwtManager;
-        $this->tokenStorageInterface = $tokenStorageInterface;
         $this->annuaire = $annuaire;
         $this->userPasswordHasher = $userPasswordHasher;
     }
@@ -39,7 +35,7 @@ class UserController extends AbstractController
     #[\Symfony\Component\Routing\Annotation\Route(
         path: '/register', name: 'api_register', defaults: ['_api_resource_class' => User::class,], methods: ['POST']
     )]
-    public function register(Request $request, UserRepository $userRepository): JsonResponse
+    public function register(Request $request): JsonResponse
     {
         $data     = json_decode($request->getContent(), true);
         $email    = $data["email"];
@@ -47,20 +43,20 @@ class UserController extends AbstractController
         $password = $data["password"];
 
         //Vérification de l’email
-        $checkEmail = $userRepository->findOneBy(['email' => $email]);
+        $checkEmail = $this->userRepository->findOneBy(['email' => $email]);
         if ($checkEmail) {
             return new JsonResponse([
                 "status"  => false,
-                "message" => "Cet email existe déjà, vous devez enchoisir un autre !"
-            ]);
+                "message" => "Cet email existe déjà, vous devez en choisir un autre !"
+            ], 403);
         }
 
-        $checkUsername = $userRepository->findOneBy(['username' => $username]);
+        $checkUsername = $this->userRepository->findOneBy(['username' => $username]);
         if ($checkUsername) {
             return new JsonResponse([
                 "status"  => false,
                 "message" => "Ce nom d'utilisateur existe déjà, vous devez en choisir un autre !"
-            ]);
+            ], 403);
         }
 
         $user = new User();
@@ -76,7 +72,7 @@ class UserController extends AbstractController
         return new JsonResponse([
             "status"  => true,
             "message" => "L’utilisateur a été créé avec succès !"
-        ]);
+        ], 201);
 
     }
 
@@ -90,4 +86,22 @@ class UserController extends AbstractController
 
         return new JsonResponse($json, 200, [], true);
     }
+
+    #[Route(
+        path: '/user-delete', name: 'app_user_delete', defaults: ['_api_resource_class' => User::class,], methods: ['DELETE'],
+    )]
+    public function delete( Request $request, SerializerInterface $serializer): Response
+    {
+        $connectedUser = $this->annuaire->getUser($request);
+        $connectedUser->setDeletedAt(new \DateTimeImmutable());
+        $this->em->persist($connectedUser);
+        $this->em->flush();
+//        $json = $serializer->serialize($connectedUser, 'json', ['groups' => 'user:read']);
+
+        return new JsonResponse([
+            "status"  => true,
+            "message" => "Votre compte a été supprimé avec succès !"
+        ], 201);
+    }
+
 }
