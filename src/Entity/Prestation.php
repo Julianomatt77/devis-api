@@ -14,7 +14,7 @@ class Prestation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['client:read'])]
+    #[Groups(['client:read', 'element:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'prestations')]
@@ -23,30 +23,30 @@ class Prestation
     private ?Element $element = null;
 
     #[ORM\Column]
-    #[Groups(['client:read'])]
+    #[Groups(['client:read', 'element:read'])]
     private ?int $qty = null;
 
     #[ORM\Column]
-    #[Groups(['client:read'])]
+    #[Groups(['client:read', 'element:read'])]
     private ?int $prixHT = null;
 
     #[ORM\Column]
-    #[Groups(['client:read'])]
+    #[Groups(['client:read', 'element:read'])]
     private ?int $tvaPercentage = null;
 
     #[ORM\Column]
-    #[Groups(['client:read'])]
+    #[Groups(['client:read', 'element:read'])]
     private ?int $tva = null;
 
     #[ORM\Column]
-    #[Groups(['client:read'])]
+    #[Groups(['client:read','element:read'])]
     private ?int $totalTTC = null;
 
     #[ORM\ManyToOne(inversedBy: 'prestations')]
     private ?Devis $devis = null;
 
     #[ORM\Column]
-    #[Groups(['client:read'])]
+    #[Groups(['client:read', 'element:read'])]
     private ?int $totalHT = null;
 
     #[ORM\ManyToOne(inversedBy: 'prestations')]

@@ -3,6 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Controller\ElementController;
 use App\Repository\ElementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,26 +16,37 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ElementRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(uriTemplate: '/elements', controller: ElementController::class, name: 'app_elements_all'),
+        new Post(uriTemplate: '/elements', controller: ElementController::class, denormalizationContext: ['groups' => ['element:write']], name: 'app_element_new'),
+        new Get(uriTemplate: '/elements/{id}', controller: ElementController::class, denormalizationContext: ['groups' => ['element:write']], name: 'app_element_show'),
+        new Delete(uriTemplate: '/elements/{id}', controller: ElementController::class, denormalizationContext: ['groups' => ['element:write']],name: 'app_element_delete'),
+        new Patch(uriTemplate: '/elements/{id}', controller: ElementController::class, denormalizationContext: ['groups' => ['element:write']], name: 'app_element_update'),
+    ],
+    formats: ["json"],
+)]
 class Element
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['client:read'])]
+    #[Groups(['client:read', 'element:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['client:read'])]
+    #[Groups(['client:read', 'element:read', 'element:write'])]
     private ?string $nom = null;
 
     /**
      * @var Collection<int, Prestation>
      */
     #[ORM\OneToMany(targetEntity: Prestation::class, mappedBy: 'element')]
+    #[Groups(['element:read'])]
     private Collection $prestations;
 
     #[ORM\ManyToOne(inversedBy: 'elements')]
+    #[Groups(['element:read'])]
     private ?User $user = null;
 
     public function __construct()

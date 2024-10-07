@@ -34,15 +34,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read', 'adresse:read', 'client:read'])]
+    #[Groups(['user:read', 'adresse:read', 'client:read', 'element:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:write', 'user:read', 'adresse:read', 'client:read'])]
+    #[Groups(['user:write', 'user:read', 'adresse:read', 'client:read', 'element:read'])]
     private ?string $username = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:write', 'user:read', 'email:write', 'adresse:read', 'client:read'])]
+    #[Groups(['user:write', 'user:read', 'email:write', 'adresse:read', 'client:read','element:read'])]
     private ?string $email = null;
 
     /**

@@ -68,11 +68,11 @@ class AdresseController extends AbstractController
         $adresse = $this->adresseRepository->findOneBy(['id' => $adresse->getId(), 'user'=> $user]);
 
         if (!$adresse) {
-            return new JsonResponse(null, 404);
+            return new JsonResponse('Cette adresse n\éxiste ppas !', 404);
         }
 
         if ($adresse->getUser() !== $user) {
-            return new JsonResponse(null, 403);
+            return new JsonResponse(['error' => 'Utilisateur non autorisé'], 403);
         }
 
         $json = $serializer->serialize($adresse, 'json', ['groups' => 'adresse:read']);

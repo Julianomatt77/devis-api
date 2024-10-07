@@ -83,11 +83,11 @@ class ClientController extends AbstractController
         $client = $this->clientRepository->findOneBy(['id' => $client->getId(), 'user'=> $user]);
 
         if (!$client) {
-            return new JsonResponse(null, 404);
+            return new JsonResponse(['error' => 'client introuvable'], 404);
         }
 
         if ($client->getUser() !== $user) {
-            return new JsonResponse(null, 403);
+            return new JsonResponse(['error' => 'Utilisateur non autorisé'], 403);
         }
 
         $json = $serializer->serialize($client, 'json', ['groups' => 'client:read']);
