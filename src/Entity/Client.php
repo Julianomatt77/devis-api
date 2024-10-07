@@ -7,6 +7,7 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 #[ApiResource]
@@ -15,21 +16,26 @@ class Client
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['adresse:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['adresse:read'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['adresse:read'])]
     private ?string $prenom = null;
 
     #[ORM\ManyToOne(inversedBy: 'clients')]
     private ?Adresse $adresse = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['adresse:read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 10, nullable: true)]
+    #[Groups(['adresse:read'])]
     private ?string $telephone = null;
 
     /**

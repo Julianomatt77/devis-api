@@ -3,51 +3,77 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Controller\AdresseController;
 use App\Repository\AdresseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AdresseRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(uriTemplate: '/adresses', controller: AdresseController::class, name: 'app_adresses_all'),
+        new Post(uriTemplate: '/adresses', controller: AdresseController::class, denormalizationContext: ['groups' => ['adresse:write']], name: 'app_adresse_new'),
+        new Get(uriTemplate: '/adresses/{id}', controller: AdresseController::class, denormalizationContext: ['groups' => ['adresse:write']], name: 'app_adresse_show'),
+        new Delete(uriTemplate: '/adresses/{id}', controller: AdresseController::class, denormalizationContext: ['groups' => ['adresse:write']],name: 'app_adresse_delete'),
+        new Patch(uriTemplate: '/adresses/{id}', controller: AdresseController::class, denormalizationContext: ['groups' => ['adresse:write']], name: 'app_adresse_update'),
+    ],
+    formats: ["json"],
+)]
 class Adresse
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['adresse:read', 'adresse:write'])]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['adresse:read', 'adresse:write'])]
     private ?int $numero = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['adresse:read', 'adresse:write'])]
     private ?string $rue = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['adresse:read', 'adresse:write'])]
     private ?string $complementaire = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['adresse:read', 'adresse:write'])]
     private ?string $cp = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['adresse:read', 'adresse:write'])]
     private ?string $ville = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['adresse:read', 'adresse:write'])]
     private ?string $pays = null;
 
     /**
      * @var Collection<int, Client>
      */
     #[ORM\OneToMany(targetEntity: Client::class, mappedBy: 'adresse')]
+    #[Groups(['adresse:read'])]
     private Collection $clients;
 
     /**
      * @var Collection<int, Entreprise>
      */
     #[ORM\OneToMany(targetEntity: Entreprise::class, mappedBy: 'adresse')]
+    #[Groups(['adresse:read'])]
     private Collection $entreprises;
 
     #[ORM\ManyToOne(inversedBy: 'adresses')]
+    #[Groups(['adresse:read'])]
     private ?User $user = null;
 
     public function __construct()
