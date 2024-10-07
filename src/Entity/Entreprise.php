@@ -3,6 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Controller\EntrepriseController;
 use App\Repository\EntrepriseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,61 +16,73 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: EntrepriseRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(uriTemplate: '/entreprises', controller: EntrepriseController::class, name: 'app_entreprises_all'),
+        new Post(uriTemplate: '/entreprises', controller: EntrepriseController::class, denormalizationContext: ['groups' => ['entreprise:write']], name: 'app_entreprise_new'),
+        new Get(uriTemplate: '/entreprises/{id}', controller: EntrepriseController::class, denormalizationContext: ['groups' => ['entreprise:write']], name: 'app_entreprise_show'),
+        new Delete(uriTemplate: '/entreprises/{id}', controller: EntrepriseController::class, denormalizationContext: ['groups' => ['entreprise:write']],name: 'app_entreprise_delete'),
+        new Patch(uriTemplate: '/entreprises/{id}', controller: EntrepriseController::class, denormalizationContext: ['groups' => ['entreprise:write']], name: 'app_entreprise_update'),
+    ],
+    formats: ["json"],
+)]
 class Entreprise
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['adresse:read', 'user:read'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
     private ?string $siret = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
     private ?string $codeApe = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read'])]
+    #[Groups(['adresse:read', 'user:read','entreprise:read', 'entreprise:write'])]
     private ?string $tvaIntracom = null;
 
     #[ORM\ManyToOne(inversedBy: 'entreprises')]
+    #[Groups(['entreprise:read', 'entreprise:write'])]
     private ?Adresse $adresse = null;
 
     #[ORM\Column(length: 10, nullable: true)]
-    #[Groups(['adresse:read', 'user:read'])]
+    #[Groups(['adresse:read', 'user:read','entreprise:read', 'entreprise:write'])]
     private ?string $telephone1 = null;
 
     #[ORM\Column(length: 10, nullable: true)]
-    #[Groups(['adresse:read', 'user:read'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
     private ?string $telephone2 = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
     private ?string $web = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
     private ?string $contact = null;
 
     /**
      * @var Collection<int, Devis>
      */
     #[ORM\OneToMany(targetEntity: Devis::class, mappedBy: 'entreprise')]
+    #[Groups(['entreprise:read'])]
     private Collection $devis;
 
     #[ORM\ManyToOne(inversedBy: 'entreprises')]
+    #[Groups(['entreprise:read'])]
     private ?User $user = null;
 
     public function __construct()
