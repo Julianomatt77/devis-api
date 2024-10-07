@@ -78,9 +78,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $tokenExpiryDate = null;
 
+    /**
+     * @var Collection<int, Adresse>
+     */
+    #[ORM\OneToMany(targetEntity: Adresse::class, mappedBy: 'user')]
+    #[Groups(['user:read'])]
+    private Collection $adresses;
+
+    /**
+     * @var Collection<int, Client>
+     */
+    #[ORM\OneToMany(targetEntity: Client::class, mappedBy: 'user')]
+    #[Groups(['user:read'])]
+    private Collection $clients;
+
+    /**
+     * @var Collection<int, Element>
+     */
+    #[ORM\OneToMany(targetEntity: Element::class, mappedBy: 'user')]
+    #[Groups(['user:read'])]
+    private Collection $elements;
+
+    /**
+     * @var Collection<int, Entreprise>
+     */
+    #[ORM\OneToMany(targetEntity: Entreprise::class, mappedBy: 'user')]
+    #[Groups(['user:read'])]
+    private Collection $entreprises;
+
     public function __construct()
     {
         $this->devis = new ArrayCollection();
+        $this->adresses = new ArrayCollection();
+        $this->clients = new ArrayCollection();
+        $this->elements = new ArrayCollection();
+        $this->entreprises = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -244,6 +276,126 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTokenExpiryDate(?\DateTimeImmutable $tokenExpiryDate): static
     {
         $this->tokenExpiryDate = $tokenExpiryDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Adresse>
+     */
+    public function getAdresses(): Collection
+    {
+        return $this->adresses;
+    }
+
+    public function addAdress(Adresse $adress): static
+    {
+        if (!$this->adresses->contains($adress)) {
+            $this->adresses->add($adress);
+            $adress->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdress(Adresse $adress): static
+    {
+        if ($this->adresses->removeElement($adress)) {
+            // set the owning side to null (unless already changed)
+            if ($adress->getUser() === $this) {
+                $adress->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Client>
+     */
+    public function getClients(): Collection
+    {
+        return $this->clients;
+    }
+
+    public function addClient(Client $client): static
+    {
+        if (!$this->clients->contains($client)) {
+            $this->clients->add($client);
+            $client->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClient(Client $client): static
+    {
+        if ($this->clients->removeElement($client)) {
+            // set the owning side to null (unless already changed)
+            if ($client->getUser() === $this) {
+                $client->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Element>
+     */
+    public function getElements(): Collection
+    {
+        return $this->elements;
+    }
+
+    public function addElement(Element $element): static
+    {
+        if (!$this->elements->contains($element)) {
+            $this->elements->add($element);
+            $element->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeElement(Element $element): static
+    {
+        if ($this->elements->removeElement($element)) {
+            // set the owning side to null (unless already changed)
+            if ($element->getUser() === $this) {
+                $element->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Entreprise>
+     */
+    public function getEntreprises(): Collection
+    {
+        return $this->entreprises;
+    }
+
+    public function addEntreprise(Entreprise $entreprise): static
+    {
+        if (!$this->entreprises->contains($entreprise)) {
+            $this->entreprises->add($entreprise);
+            $entreprise->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEntreprise(Entreprise $entreprise): static
+    {
+        if ($this->entreprises->removeElement($entreprise)) {
+            // set the owning side to null (unless already changed)
+            if ($entreprise->getUser() === $this) {
+                $entreprise->setUser(null);
+            }
+        }
 
         return $this;
     }

@@ -73,7 +73,6 @@ class UserController extends AbstractController
             "status"  => true,
             "message" => "L’utilisateur a été créé avec succès !"
         ], 201);
-
     }
 
     #[Route(

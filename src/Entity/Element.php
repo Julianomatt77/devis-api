@@ -26,6 +26,9 @@ class Element
     #[ORM\OneToMany(targetEntity: Prestation::class, mappedBy: 'element')]
     private Collection $prestations;
 
+    #[ORM\ManyToOne(inversedBy: 'elements')]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->prestations = new ArrayCollection();
@@ -74,6 +77,18 @@ class Element
                 $prestation->setElement(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

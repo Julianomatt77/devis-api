@@ -38,6 +38,9 @@ class Client
     #[ORM\OneToMany(targetEntity: Devis::class, mappedBy: 'client')]
     private Collection $devis;
 
+    #[ORM\ManyToOne(inversedBy: 'clients')]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->devis = new ArrayCollection();
@@ -134,6 +137,18 @@ class Client
                 $devi->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

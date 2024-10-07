@@ -47,6 +47,9 @@ class Adresse
     #[ORM\OneToMany(targetEntity: Entreprise::class, mappedBy: 'adresse')]
     private Collection $entreprises;
 
+    #[ORM\ManyToOne(inversedBy: 'adresses')]
+    private ?User $user = null;
+
     public function __construct()
     {
         $this->clients = new ArrayCollection();
@@ -186,6 +189,18 @@ class Adresse
                 $entreprise->setAdresse(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
