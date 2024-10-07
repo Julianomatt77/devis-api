@@ -16,46 +16,46 @@ class Entreprise
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read'])]
     private ?string $siret = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read'])]
     private ?string $codeApe = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read'])]
     private ?string $tvaIntracom = null;
 
     #[ORM\ManyToOne(inversedBy: 'entreprises')]
     private ?Adresse $adresse = null;
 
     #[ORM\Column(length: 10, nullable: true)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read'])]
     private ?string $telephone1 = null;
 
     #[ORM\Column(length: 10, nullable: true)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read'])]
     private ?string $telephone2 = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read'])]
     private ?string $web = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read'])]
     private ?string $contact = null;
 
     /**

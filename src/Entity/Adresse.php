@@ -31,49 +31,49 @@ class Adresse
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['adresse:read', 'adresse:write'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read', 'client:write'])]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['adresse:read', 'adresse:write'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read'])]
     private ?int $numero = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'adresse:write'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read'])]
     private ?string $rue = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'adresse:write'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read'])]
     private ?string $complementaire = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['adresse:read', 'adresse:write'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read'])]
     private ?string $cp = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['adresse:read', 'adresse:write'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read'])]
     private ?string $ville = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['adresse:read', 'adresse:write'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read'])]
     private ?string $pays = null;
 
     /**
      * @var Collection<int, Client>
      */
     #[ORM\OneToMany(targetEntity: Client::class, mappedBy: 'adresse')]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read'])]
     private Collection $clients;
 
     /**
      * @var Collection<int, Entreprise>
      */
     #[ORM\OneToMany(targetEntity: Entreprise::class, mappedBy: 'adresse')]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read'])]
     private Collection $entreprises;
 
     #[ORM\ManyToOne(inversedBy: 'adresses')]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', ])]
     private ?User $user = null;
 
     public function __construct()

@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Adresse;
+use App\Entity\Client;
+use App\Entity\Entreprise;
 use App\Repository\AdresseRepository;
 use App\Repository\UserRepository;
 use App\Service\AnnuaireService;
@@ -107,7 +109,7 @@ class AdresseController extends AbstractController
     #[Route(
         path: '/adresses/{id}', name: 'app_adresse_delete', defaults: ['_api_resource_class' => Adresse::class,], methods: ['DELETE'],
     )]
-    public function delete(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Adresse $adresse): JSONResponse
+    public function delete(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Adresse $adresse, Entreprise $entreprise = null, Client $client = null): JSONResponse
     {
         $user = $this->annuaire->getUser($request);
         $adresse = $this->adresseRepository->findOneBy(['id' => $adresse->getId(), 'user'=> $user]);
@@ -118,6 +120,19 @@ class AdresseController extends AbstractController
 
         if ($adresse->getUser() !== $user) {
             return new JsonResponse(['error' => 'Utilisateur non autorisé'], 403);
+        }
+
+        $entrepriseRepository = $em->getRepository(Entreprise::class);
+        $clientRepository = $em->getRepository(Client::class);
+        $entreprise = $entrepriseRepository->findOneBy(['adresse' => $adresse, 'user'=> $user]);
+        $client = $clientRepository->findOneBy(['adresse' => $adresse, 'user'=> $user]);
+
+        if ($client ){
+            return new JsonResponse(['error' => 'Suppression impossible, adresse utilisée par un client'], 403);
+        }
+
+        if ($entreprise) {
+            return new JsonResponse(['error' => 'Suppression impossible, adresse utilisée par une entreprise'], 403);
         }
 
         $em->remove($adresse);

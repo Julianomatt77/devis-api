@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PrestationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PrestationRepository::class)]
 #[ApiResource]
@@ -13,31 +14,39 @@ class Prestation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['client:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'prestations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['client:read'])]
     private ?Element $element = null;
 
     #[ORM\Column]
+    #[Groups(['client:read'])]
     private ?int $qty = null;
 
     #[ORM\Column]
+    #[Groups(['client:read'])]
     private ?int $prixHT = null;
 
     #[ORM\Column]
+    #[Groups(['client:read'])]
     private ?int $tvaPercentage = null;
 
     #[ORM\Column]
+    #[Groups(['client:read'])]
     private ?int $tva = null;
 
     #[ORM\Column]
+    #[Groups(['client:read'])]
     private ?int $totalTTC = null;
 
     #[ORM\ManyToOne(inversedBy: 'prestations')]
     private ?Devis $devis = null;
 
     #[ORM\Column]
+    #[Groups(['client:read'])]
     private ?int $totalHT = null;
 
     #[ORM\ManyToOne(inversedBy: 'prestations')]

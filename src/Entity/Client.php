@@ -3,6 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Controller\ClientController;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,41 +16,53 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(uriTemplate: '/clients', controller: ClientController::class, name: 'app_clients_all'),
+        new Post(uriTemplate: '/clients', controller: ClientController::class, denormalizationContext: ['groups' => ['client:write']], name: 'app_client_new'),
+        new Get(uriTemplate: '/clients/{id}', controller: ClientController::class, denormalizationContext: ['groups' => ['client:write']], name: 'app_client_show'),
+        new Delete(uriTemplate: '/clients/{id}', controller: ClientController::class, denormalizationContext: ['groups' => ['client:write']],name: 'app_client_delete'),
+        new Patch(uriTemplate: '/clients/{id}', controller: ClientController::class, denormalizationContext: ['groups' => ['client:write']], name: 'app_client_update'),
+    ],
+    formats: ["json"],
+)]
 class Client
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read', 'client:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read', 'client:read', 'client:write'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read', 'client:read', 'client:write'])]
     private ?string $prenom = null;
 
     #[ORM\ManyToOne(inversedBy: 'clients')]
+    #[Groups(['client:read', 'client:write'])]
     private ?Adresse $adresse = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read', 'client:read', 'client:write'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 10, nullable: true)]
-    #[Groups(['adresse:read'])]
+    #[Groups(['adresse:read', 'user:read', 'client:read', 'client:write'])]
     private ?string $telephone = null;
 
     /**
      * @var Collection<int, Devis>
      */
     #[ORM\OneToMany(targetEntity: Devis::class, mappedBy: 'client')]
+    #[Groups(['client:read'])]
     private Collection $devis;
 
     #[ORM\ManyToOne(inversedBy: 'clients')]
+    #[Groups(['client:read'])]
     private ?User $user = null;
 
     public function __construct()
