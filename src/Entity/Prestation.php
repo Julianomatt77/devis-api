@@ -40,6 +40,9 @@ class Prestation
     #[ORM\Column]
     private ?int $totalHT = null;
 
+    #[ORM\ManyToOne(inversedBy: 'prestations')]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +140,18 @@ class Prestation
     public function setTotalHT(int $totalHT): static
     {
         $this->totalHT = $totalHT;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

@@ -106,6 +106,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read'])]
     private Collection $entreprises;
 
+    /**
+     * @var Collection<int, Prestation>
+     */
+    #[ORM\OneToMany(targetEntity: Prestation::class, mappedBy: 'user')]
+    private Collection $prestations;
+
     public function __construct()
     {
         $this->devis = new ArrayCollection();
@@ -113,6 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->clients = new ArrayCollection();
         $this->elements = new ArrayCollection();
         $this->entreprises = new ArrayCollection();
+        $this->prestations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -394,6 +401,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($entreprise->getUser() === $this) {
                 $entreprise->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Prestation>
+     */
+    public function getPrestations(): Collection
+    {
+        return $this->prestations;
+    }
+
+    public function addPrestation(Prestation $prestation): static
+    {
+        if (!$this->prestations->contains($prestation)) {
+            $this->prestations->add($prestation);
+            $prestation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePrestation(Prestation $prestation): static
+    {
+        if ($this->prestations->removeElement($prestation)) {
+            // set the owning side to null (unless already changed)
+            if ($prestation->getUser() === $this) {
+                $prestation->setUser(null);
             }
         }
 

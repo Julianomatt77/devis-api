@@ -46,6 +46,7 @@ class AppFixtures extends Fixture
         $adresse1->setCp("75010");
         $adresse1->setVille("Paris");
         $adresse1->setPays("France");
+        $adresse1->setUser($user);
         $manager->persist($adresse1);
 
         $adresse2 = new Adresse();
@@ -55,6 +56,7 @@ class AppFixtures extends Fixture
         $adresse2->setCp("34800");
         $adresse2->setVille("Peret");
         $adresse2->setPays("France");
+        $adresse2->setUser($user);
         $manager->persist($adresse2);
 
         $adresse3 = new Adresse();
@@ -64,6 +66,7 @@ class AppFixtures extends Fixture
         $adresse3->setCp("34200");
         $adresse3->setVille("Bisous");
         $adresse3->setPays("France");
+        $adresse3->setUser($user2);
         $manager->persist($adresse3);
 
         $client = new Client();
@@ -72,6 +75,7 @@ class AppFixtures extends Fixture
         $client->setPrenom("Gégé");
         $client->setAdresse($adresse1);
         $client->setTelephone("0612345678");
+        $client->setUser($user);
         $manager->persist($client);
 
         $client2 = new Client();
@@ -80,14 +84,17 @@ class AppFixtures extends Fixture
         $client2->setPrenom("Germaine");
         $client2->setAdresse($adresse2);
         $client2->setTelephone("0612995678");
+        $client2->setUser($user2);
         $manager->persist($client2);
 
         $element = new Element();
         $element->setNom("Création d'un site web Wordpress ayant 6 pages");
+        $element->setUser($user);
         $manager->persist($element);
 
         $element2 = new Element();
         $element2->setNom("Création d'un espace membre avec un forum");
+        $element2->setUser($user);
         $manager->persist($element2);
 
         $entreprise = new Entreprise();
@@ -98,6 +105,7 @@ class AppFixtures extends Fixture
         $entreprise->setWeb("https://www.ma-super-entreprise.fr");
         $entreprise->setEmail("entreprise@moto.com");
         $entreprise->setContact("Juju Martinus");
+        $entreprise->setUser($user);
         $manager->persist($entreprise);
 
         $devis = new Devis();
@@ -128,6 +136,7 @@ de modification ultérieure du design, les modifications du code qui découlent 
         $prestation->setTotalTTC(240000);
         $prestation->setTotalHT(200000);
         $prestation->setDevis($devis);
+        $prestation->setUser($user);
 
         $prestation2 = new Prestation();
         $prestation2->setElement($element2);
@@ -138,6 +147,7 @@ de modification ultérieure du design, les modifications du code qui découlent 
         $prestation2->setTotalTTC(60000);
         $prestation2->setTotalHT(50000);
         $prestation2->setDevis($devis);
+        $prestation2->setUser($user);
 
 //        $prestations = $devis->getPrestations();
 //        $totalTTC = 0;
