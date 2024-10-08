@@ -31,11 +31,11 @@ class Element
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['client:read', 'element:read'])]
+    #[Groups(['user:read', 'client:read', 'element:read', 'prestation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['client:read', 'element:read', 'element:write'])]
+    #[Groups(['user:read', 'client:read', 'element:read', 'element:write', 'prestation:read'])]
     private ?string $nom = null;
 
     /**

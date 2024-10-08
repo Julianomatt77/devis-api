@@ -2,17 +2,181 @@
 
 namespace App\Controller;
 
+use App\Entity\Prestation;
+use App\Repository\PrestationRepository;
+use App\Repository\UserRepository;
+use App\Service\AnnuaireService;
+use App\Service\TransformService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class PrestationController extends AbstractController
 {
-    #[Route('/prestation', name: 'app_prestation')]
-    public function index(): Response
+    private UserRepository $userRepository;
+    private AnnuaireService $annuaire;
+    private TransformService $transformService;
+    private PrestationRepository $prestationRepository;
+
+    /**
+     * @param UserRepository $userRepository
+     * @param AnnuaireService $annuaire
+     * @param TransformService $transformService
+     * @param PrestationRepository $prestationRepository
+     */
+    public function __construct(UserRepository $userRepository, AnnuaireService $annuaire, TransformService $transformService, PrestationRepository $prestationRepository)
     {
-        return $this->render('prestation/index.html.twig', [
-            'controller_name' => 'PrestationController',
-        ]);
+        $this->userRepository = $userRepository;
+        $this->annuaire = $annuaire;
+        $this->transformService = $transformService;
+        $this->prestationRepository = $prestationRepository;
+    }
+
+    #[Route(
+    path: '/prestations', name: 'app_prestations_all', defaults: ['_api_resource_class' => Prestation::class,], methods: ['GET'],
+    )]
+    public function index(Request $request, SerializerInterface $serializer): JSONResponse
+    {
+        $user = $this->annuaire->getUser($request);
+        $clients = $this->prestationRepository->findBy(['user' => $user]);
+
+        $json = $serializer->serialize($clients, 'json', ['groups' => 'prestation:read']);
+
+        return new JsonResponse($json, 200, [], true);
+    }
+
+    #[Route(
+    path: '/prestations', name: 'app_prestation_new', defaults: ['_api_resource_class' => Prestation::class,], methods: ['POST'],
+    )]
+    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $em): JSONResponse
+    {
+        $user = $this->annuaire->getUser($request);
+        $content = json_decode($request->getContent(), true);
+
+        $devis = $this->transformService->getDevis($content);
+        if (isset($content['devis']) && !$devis) {
+            return new JsonResponse(['error' => 'Devis introuvable'], 404);
+        }
+        if ($devis) {
+            unset($content['devis']);
+        }
+
+        $element = $this->transformService->getElement($content);
+        if (isset($content['element']) && !$element) {
+            return new JsonResponse(['error' => 'Element introuvable'], 404);
+        }
+        if ($element) {
+            unset($content['element']);
+        }
+
+       $prestation = $serializer->deserialize(json_encode($content), Prestation::class, 'json', ['groups' => 'prestation:write']);
+        $prestation->setUser($user);
+        $prestation->setDevis($devis);
+        $prestation->setElement($element);
+
+        $prestation = $this->transformService->calculTvaAndTotal($prestation);
+
+        $em->persist($prestation);
+        $em->flush();
+
+        return new JsonResponse($serializer->serialize($prestation, 'json', ['groups' => 'prestation:read']), 201, [], true);
+    }
+
+    #[Route(
+    path: '/prestations/{id}', name: 'app_prestation_show', defaults: ['_api_resource_class' => Prestation::class,], methods: ['GET'],
+    )]
+    public function show(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Prestation $prestation): JSONResponse
+    {
+        $user = $this->annuaire->getUser($request);
+        $prestation = $this->prestationRepository->findOneBy(['id' => $prestation->getId(), 'user'=> $user]);
+
+        if (!$prestation) {
+            return new JsonResponse(['error' => 'prestation introuvable'], 404);
+        }
+
+        if ($prestation->getUser() !== $user) {
+            return new JsonResponse(['error' => 'Utilisateur non autorisé'], 403);
+        }
+
+        $json = $serializer->serialize($prestation, 'json', ['groups' => 'prestation:read']);
+
+        return new JsonResponse($json, 200, [], true);
+    }
+
+    #[Route(
+    path: '/prestations/{id}', name: 'app_prestation_update', defaults: ['_api_resource_class' => Prestation::class,], methods: ['PATCH'],
+    )]
+    public function edit(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Prestation $prestation): JSONResponse
+    {
+        $user = $this->annuaire->getUser($request);
+        $content = json_decode($request->getContent(), true);
+        $prestation = $this->prestationRepository->findOneBy(['id' => $prestation->getId(), 'user' => $user]);
+
+        if (!$prestation){
+            return new JsonResponse(['error' => 'Prestation introuvable'], 404);
+        }
+
+        if ($prestation->getUser() !== $user) {
+            return new JsonResponse(['error' => 'Utilisateur non autorisé'], 403);
+        }
+
+        $devis = $this->transformService->getDevis($content);
+        if (isset($content['devis']) && !$devis) {
+            return new JsonResponse(['error' => 'Devis introuvable'], 404);
+        }
+        if ($devis) {
+            unset($content['devis']);
+        }
+
+        $element = $this->transformService->getElement($content);
+        if (isset($content['element']) && !$element) {
+            return new JsonResponse(['error' => 'Element introuvable'], 404);
+        }
+        if ($element) {
+            unset($content['element']);
+        }
+
+        $prestation = $serializer->deserialize(json_encode($content), Prestation::class, 'json', ['groups' => 'prestation:write', 'object_to_populate' => $prestation]);
+
+        if ($devis) {
+            $prestation->setDevis($devis);
+        }
+
+        if ($element) {
+            $prestation->setElement($element);
+        }
+
+        $prestation = $this->transformService->calculTvaAndTotal($prestation);
+
+        $em->persist($prestation);
+        $em->flush();
+
+        return new JsonResponse($serializer->serialize($prestation, 'json', ['groups' => 'prestation:read']), 200, [], true);
+    }
+
+    #[Route(
+    path: '/prestations/{id}', name: 'app_prestation_delete', defaults: ['_api_resource_class' => Prestation::class,], methods: ['DELETE'],
+    )]
+    public function delete(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Prestation $prestation, Devis $devis = null): JSONResponse
+    {
+        $user = $this->annuaire->getUser($request);
+        $prestation = $this->prestationRepository->findOneBy(['id' => $prestation->getId(), 'user' => $user]);
+
+        if (!$prestation) {
+            return new JsonResponse(['error' => 'Prestation introuvable'], 404);
+        }
+
+        if ($prestation->getUser() !== $user) {
+            return new JsonResponse(['error' => 'Utilisateur non autorisé'], 403);
+        }
+
+        $em->remove($prestation);
+        $em->flush();
+
+        return new JsonResponse('Prestation supprimée !', 202);
     }
 }

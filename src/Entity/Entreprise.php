@@ -31,7 +31,7 @@ class Entreprise
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['adresse:read', 'user:read', 'entreprise:read'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'prestation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]

@@ -17,11 +17,11 @@ class Devis
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['client:read', 'entreprise:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read', 'prestation:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['client:read', 'entreprise:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read', 'prestation:read'])]
     private ?string $reference = null;
 
     #[ORM\ManyToOne(inversedBy: 'devis')]
@@ -30,57 +30,59 @@ class Devis
 
     #[ORM\ManyToOne(inversedBy: 'devis')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['prestation:read'])]
     private ?Entreprise $entreprise = null;
 
     #[ORM\ManyToOne(inversedBy: 'devis')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['prestation:read'])]
     private ?Client $client = null;
 
     /**
      * @var Collection<int, Prestation>
      */
     #[ORM\OneToMany(targetEntity: Prestation::class, mappedBy: 'devis')]
-    #[Groups(['client:read', 'entreprise:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
     private Collection $prestations;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['client:read', 'entreprise:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
     private ?\DateTimeImmutable $deletedAt = null;
 
     #[ORM\Column]
-    #[Groups(['client:read', 'entreprise:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['client:read', 'entreprise:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['client:read', 'entreprise:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
     private ?\DateTimeImmutable $paidAt = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Groups(['client:read','entreprise:read'])]
+    #[Groups(['client:read','entreprise:read', 'user:read'])]
     private ?\DateTimeInterface $dateDebutPrestation = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Groups(['client:read', 'entreprise:read'])]
+    #[Groups(['client:read', 'entreprise:read','user:read'])]
     private ?\DateTimeInterface $dateValidite = null;
 
     #[ORM\Column]
-    #[Groups(['client:read','entreprise:read'])]
+    #[Groups(['client:read','entreprise:read', 'user:read'])]
     private ?int $totalHT = null;
 
     #[ORM\Column]
-    #[Groups(['client:read', 'entreprise:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
     private ?int $tva = null;
 
     #[ORM\Column]
-    #[Groups(['client:read', 'entreprise:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
     private ?int $totalTTC = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['client:read', 'entreprise:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
     private ?string $tc = null;
 
     public function __construct()

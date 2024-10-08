@@ -62,18 +62,18 @@ class Adresse
      * @var Collection<int, Client>
      */
     #[ORM\OneToMany(targetEntity: Client::class, mappedBy: 'adresse')]
-    #[Groups(['adresse:read', 'user:read'])]
+    #[Groups(['adresse:read'])]
     private Collection $clients;
 
     /**
      * @var Collection<int, Entreprise>
      */
     #[ORM\OneToMany(targetEntity: Entreprise::class, mappedBy: 'adresse')]
-    #[Groups(['adresse:read', 'user:read'])]
+    #[Groups(['adresse:read'])]
     private Collection $entreprises;
 
     #[ORM\ManyToOne(inversedBy: 'adresses')]
-    #[Groups(['adresse:read', ])]
+    #[Groups(['adresse:read'])]
     private ?User $user = null;
 
     public function __construct()
