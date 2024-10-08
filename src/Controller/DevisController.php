@@ -6,6 +6,7 @@ use App\Entity\Devis;
 use App\Repository\DevisRepository;
 use App\Repository\UserRepository;
 use App\Service\AnnuaireService;
+use App\Service\DataService;
 use App\Service\TransformService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,6 +22,7 @@ class DevisController extends AbstractController
     private AnnuaireService $annuaire;
     private TransformService $transformService;
     private DevisRepository $devisRepository;
+    private DataService $dataService;
 
     /**
      * @param UserRepository $userRepository
@@ -28,12 +30,13 @@ class DevisController extends AbstractController
      * @param TransformService $transformService
      * @param DevisRepository $devisRepository
      */
-    public function __construct(UserRepository $userRepository, AnnuaireService $annuaire, TransformService $transformService, DevisRepository $devisRepository)
+    public function __construct(UserRepository $userRepository, AnnuaireService $annuaire, TransformService $transformService, DevisRepository $devisRepository, DataService $dataService)
     {
         $this->userRepository = $userRepository;
         $this->annuaire = $annuaire;
         $this->transformService = $transformService;
         $this->devisRepository = $devisRepository;
+        $this->dataService = $dataService;
     }
 
     #[Route(
@@ -157,24 +160,7 @@ class DevisController extends AbstractController
             }
         }
 
-        $devis->setUpdatedAt(new \DateTimeImmutable());
-        $debut = new \DateTime();
-        $debut->modify('+1 month');
-        $devis->setDateValidite(new \DateTime($debut->format('Y-m-d')));
-
-        $prestations = $devis->getPrestations();
-        $tva = 0;
-        $totalHT = 0;
-        $totalTTC = 0;
-        foreach ($prestations as $prestation) {
-            $tva += $prestation->getTva();
-            $totalHT += $prestation->getTotalHT();
-            $totalTTC += $prestation->getTotalTTC();
-        }
-
-        $devis->setTva($tva);
-        $devis->setTotalHT($totalHT);
-        $devis->setTotalTTC($totalTTC);
+        $devis = $this->dataService->updateDevis($devis, $user);
 
         $em->persist($devis);
         $em->flush();

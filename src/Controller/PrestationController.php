@@ -6,13 +6,16 @@ use App\Entity\Prestation;
 use App\Repository\PrestationRepository;
 use App\Repository\UserRepository;
 use App\Service\AnnuaireService;
+use App\Service\DataService;
 use App\Service\TransformService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class PrestationController extends AbstractController
@@ -21,19 +24,22 @@ class PrestationController extends AbstractController
     private AnnuaireService $annuaire;
     private TransformService $transformService;
     private PrestationRepository $prestationRepository;
+    private DataService $dataService;
 
     /**
      * @param UserRepository $userRepository
      * @param AnnuaireService $annuaire
      * @param TransformService $transformService
      * @param PrestationRepository $prestationRepository
+     * @param DataService $dataService
      */
-    public function __construct(UserRepository $userRepository, AnnuaireService $annuaire, TransformService $transformService, PrestationRepository $prestationRepository)
+    public function __construct(UserRepository $userRepository, AnnuaireService $annuaire, TransformService $transformService, PrestationRepository $prestationRepository, DataService $dataService)
     {
         $this->userRepository = $userRepository;
         $this->annuaire = $annuaire;
         $this->transformService = $transformService;
         $this->prestationRepository = $prestationRepository;
+        $this->dataService = $dataService;
     }
 
     #[Route(
@@ -83,6 +89,12 @@ class PrestationController extends AbstractController
         $em->persist($prestation);
         $em->flush();
 
+        if ($prestation->getDevis()) {
+            $devis = $this->dataService->updateDevis($prestation->getDevis(), $user);
+            $em->persist($devis);
+            $em->flush();
+        }
+
         return new JsonResponse($serializer->serialize($prestation, 'json', ['groups' => 'prestation:read']), 201, [], true);
     }
 
@@ -110,7 +122,7 @@ class PrestationController extends AbstractController
     #[Route(
     path: '/prestations/{id}', name: 'app_prestation_update', defaults: ['_api_resource_class' => Prestation::class,], methods: ['PATCH'],
     )]
-    public function edit(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Prestation $prestation): JSONResponse
+    public function edit(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Prestation $prestation, RouterInterface $router)
     {
         $user = $this->annuaire->getUser($request);
         $content = json_decode($request->getContent(), true);
@@ -155,6 +167,12 @@ class PrestationController extends AbstractController
         $em->persist($prestation);
         $em->flush();
 
+        if ($prestation->getDevis()) {
+            $devis = $this->dataService->updateDevis($prestation->getDevis(), $user);
+            $em->persist($devis);
+            $em->flush();
+        }
+
         return new JsonResponse($serializer->serialize($prestation, 'json', ['groups' => 'prestation:read']), 200, [], true);
     }
 
@@ -165,6 +183,7 @@ class PrestationController extends AbstractController
     {
         $user = $this->annuaire->getUser($request);
         $prestation = $this->prestationRepository->findOneBy(['id' => $prestation->getId(), 'user' => $user]);
+        $devis = $prestation->getDevis();
 
         if (!$prestation) {
             return new JsonResponse(['error' => 'Prestation introuvable'], 404);
@@ -176,6 +195,12 @@ class PrestationController extends AbstractController
 
         $em->remove($prestation);
         $em->flush();
+
+        if ($devis) {
+            $devis = $this->dataService->updateDevis($prestation->getDevis(), $user);
+            $em->persist($devis);
+            $em->flush();
+        }
 
         return new JsonResponse('Prestation supprimée !', 202);
     }
