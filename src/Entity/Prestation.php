@@ -8,7 +8,6 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use App\Controller\ClientController;
 use App\Controller\PrestationController;
 use App\Repository\PrestationRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,32 +29,32 @@ class Prestation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['client:read', 'element:read', 'user:read', 'prestation:read'])]
+    #[Groups(['client:read', 'element:read', 'user:read', 'prestation:read', 'devis:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'prestations')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['client:read', 'user:read', 'prestation:read', 'prestation:write'])]
+    #[Groups(['client:read', 'user:read', 'prestation:read', 'prestation:write', 'devis:read'])]
     private ?Element $element = null;
 
     #[ORM\Column]
-    #[Groups(['client:read', 'element:read', 'prestation:read', 'prestation:write'])]
+    #[Groups(['client:read', 'element:read', 'prestation:read', 'prestation:write', 'devis:read'])]
     private ?int $qty = null;
 
     #[ORM\Column]
-    #[Groups(['client:read', 'element:read', 'prestation:read', 'prestation:write'])]
+    #[Groups(['client:read', 'element:read', 'prestation:read', 'prestation:write', 'devis:read'])]
     private ?int $prixHT = null;
 
     #[ORM\Column]
-    #[Groups(['client:read', 'element:read', 'prestation:read', 'prestation:write'])]
+    #[Groups(['client:read', 'element:read', 'prestation:read', 'prestation:write', 'devis:read'])]
     private ?int $tvaPercentage = null;
 
     #[ORM\Column]
-    #[Groups(['client:read', 'element:read', 'prestation:read'])]
+    #[Groups(['client:read', 'element:read', 'prestation:read', 'devis:read'])]
     private ?int $tva = null;
 
     #[ORM\Column]
-    #[Groups(['client:read','element:read', 'prestation:read'])]
+    #[Groups(['client:read','element:read', 'prestation:read', 'devis:read'])]
     private ?int $totalTTC = null;
 
     #[ORM\ManyToOne(inversedBy: 'prestations')]
@@ -63,7 +62,7 @@ class Prestation
     private ?Devis $devis = null;
 
     #[ORM\Column]
-    #[Groups(['client:read', 'element:read', 'prestation:read'])]
+    #[Groups(['client:read', 'element:read', 'prestation:read', 'devis:read'])]
     private ?int $totalHT = null;
 
     #[ORM\ManyToOne(inversedBy: 'prestations')]

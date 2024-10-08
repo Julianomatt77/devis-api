@@ -161,7 +161,7 @@ class PrestationController extends AbstractController
     #[Route(
     path: '/prestations/{id}', name: 'app_prestation_delete', defaults: ['_api_resource_class' => Prestation::class,], methods: ['DELETE'],
     )]
-    public function delete(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Prestation $prestation, Devis $devis = null): JSONResponse
+    public function delete(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Prestation $prestation): JSONResponse
     {
         $user = $this->annuaire->getUser($request);
         $prestation = $this->prestationRepository->findOneBy(['id' => $prestation->getId(), 'user' => $user]);

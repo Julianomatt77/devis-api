@@ -3,6 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use App\Controller\DevisController;
 use App\Repository\DevisRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,17 +17,26 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: DevisRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        new GetCollection(uriTemplate: '/devis', controller: DevisController::class, name: 'app_devis_all'),
+        new Post(uriTemplate: '/devis', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_new'),
+        new Get(uriTemplate: '/devis/{id}', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_show'),
+        new Delete(uriTemplate: '/devis/{id}', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']],name: 'app_devis_delete'),
+        new Patch(uriTemplate: '/devis/{id}', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_update'),
+    ],
+    formats: ["json"],
+)]
 class Devis
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['client:read', 'entreprise:read', 'user:read', 'prestation:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read', 'prestation:read', 'devis:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['client:read', 'entreprise:read', 'user:read', 'prestation:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read', 'prestation:read', 'devis:read', 'devis:write'])]
     private ?string $reference = null;
 
     #[ORM\ManyToOne(inversedBy: 'devis')]
@@ -30,59 +45,59 @@ class Devis
 
     #[ORM\ManyToOne(inversedBy: 'devis')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['prestation:read'])]
+    #[Groups(['prestation:read', 'devis:read', 'devis:write'])]
     private ?Entreprise $entreprise = null;
 
     #[ORM\ManyToOne(inversedBy: 'devis')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['prestation:read'])]
+    #[Groups(['prestation:read', 'devis:read', 'devis:write'])]
     private ?Client $client = null;
 
     /**
      * @var Collection<int, Prestation>
      */
     #[ORM\OneToMany(targetEntity: Prestation::class, mappedBy: 'devis')]
-    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read', 'devis:read'])]
     private Collection $prestations;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read', 'devis:read'])]
     private ?\DateTimeImmutable $deletedAt = null;
 
     #[ORM\Column]
-    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read', 'devis:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read', 'devis:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read', 'devis:read', 'devis:write'])]
     private ?\DateTimeImmutable $paidAt = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Groups(['client:read','entreprise:read', 'user:read'])]
+    #[Groups(['client:read','entreprise:read', 'user:read', 'devis:read', 'devis:write'])]
     private ?\DateTimeInterface $dateDebutPrestation = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Groups(['client:read', 'entreprise:read','user:read'])]
+    #[Groups(['client:read', 'entreprise:read','user:read', 'devis:read'])]
     private ?\DateTimeInterface $dateValidite = null;
 
     #[ORM\Column]
-    #[Groups(['client:read','entreprise:read', 'user:read'])]
+    #[Groups(['client:read','entreprise:read', 'user:read', 'devis:read'])]
     private ?int $totalHT = null;
 
     #[ORM\Column]
-    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read', 'devis:read'])]
     private ?int $tva = null;
 
     #[ORM\Column]
-    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read', 'devis:read'])]
     private ?int $totalTTC = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['client:read', 'entreprise:read', 'user:read'])]
+    #[Groups(['client:read', 'entreprise:read', 'user:read', 'devis:read', 'devis:write'])]
     private ?string $tc = null;
 
     public function __construct()

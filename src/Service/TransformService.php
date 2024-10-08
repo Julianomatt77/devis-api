@@ -2,8 +2,10 @@
 namespace App\Service;
 
 use App\Entity\Adresse;
+use App\Entity\Client;
 use App\Entity\Devis;
 use App\Entity\Element;
+use App\Entity\Entreprise;
 use App\Entity\Prestation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -61,7 +63,34 @@ class TransformService
         return null;
     }
 
-    public function calculTvaAndTotal(Prestation $prestation)
+    public function getEntreprise(array $data): Entreprise | null
+    {
+        $entrepriseRepository = $this->em->getRepository(Entreprise::class);
+        if (isset($data['entreprise']) && isset($data['entreprise']['id'])) {
+            $entreprise = $entrepriseRepository->findOneBy(['id' => $data['entreprise']['id']]);
+
+            if ($entreprise) {
+                return $entreprise;
+            }
+        }
+
+        return null;
+    }
+
+    public function getClient(array $data): Client | null
+    {
+        $clientRepository = $this->em->getRepository(Client::class);
+        if (isset($data['client']) && isset($data['client']['id'])) {
+            $client = $clientRepository->findOneBy(['id' => $data['client']['id']]);
+
+            if ($client) {
+                return $client;
+            }
+        }
+        return null;
+    }
+
+    public function calculTvaAndTotal(Prestation $prestation): Prestation
     {
         $tvaUnitaire = $prestation->getPrixHT() * $prestation->getTvaPercentage() / 100;
         $totalHT = $prestation->getPrixHT() * $prestation->getQty();
