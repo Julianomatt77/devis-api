@@ -44,6 +44,7 @@ security:
     access_control:
          - { path: ^/register, roles: PUBLIC_ACCESS }
          - { path: ^/login, roles: PUBLIC_ACCESS }
+         - { path: ^/contact, roles: PUBLIC_ACCESS }
          - { path: ^/adresses,       roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/clients,       roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/devis,       roles: IS_AUTHENTICATED_FULLY }

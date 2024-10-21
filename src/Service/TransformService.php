@@ -104,4 +104,42 @@ class TransformService
         return $prestation;
     }
 
+    public function divideByHundred(Prestation $prestation): Prestation
+    {
+        if ($prestation->getPrixHT()){
+            $prestation->setPrixHT($prestation->getPrixHT() / 100);
+        }
+
+        if ($prestation->getTotalTTC()){
+            $prestation->setTotalTTC($prestation->getTotalTTC() / 100);
+        }
+
+        if ($prestation->getTva()){
+            $prestation->setTva($prestation->getTva() / 100);
+        }
+
+        if ($prestation->getTotalHT()){
+            $prestation->setTotalHT($prestation->getTotalHT() / 100);
+        }
+
+        return $prestation;
+    }
+
+    public function divideByHundredForDevis(Devis $devis): Devis
+    {
+        if ($devis->getTotalTTC()){
+            $devis->setTotalTTC($devis->getTotalTTC() / 100);
+        }
+
+        if ($devis->getTva()){
+            $devis->setTva($devis->getTva() / 100);
+        }
+
+        if ($devis->getTotalHT()){
+            $devis->setTotalHT($devis->getTotalHT() / 100);
+        }
+
+        return $devis;
+    }
+
 }

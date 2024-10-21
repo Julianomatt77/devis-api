@@ -11,9 +11,7 @@ use App\Service\TransformService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -48,9 +46,9 @@ class PrestationController extends AbstractController
     public function index(Request $request, SerializerInterface $serializer): JSONResponse
     {
         $user = $this->annuaire->getUser($request);
-        $clients = $this->prestationRepository->findBy(['user' => $user]);
+        $prestations = $this->prestationRepository->findBy(['user' => $user]);
 
-        $json = $serializer->serialize($clients, 'json', ['groups' => 'prestation:read']);
+        $json = $serializer->serialize($prestations, 'json', ['groups' => 'prestation:read']);
 
         return new JsonResponse($json, 200, [], true);
     }
