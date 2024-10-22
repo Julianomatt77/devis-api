@@ -15,6 +15,10 @@ composer install
 
 - MySQL 8 database
 
+### Authentification
+
+- add jwt folder with public and private key
+
 ### Mailer
 
 - add MAILER_DSN env variable
