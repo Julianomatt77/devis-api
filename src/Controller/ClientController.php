@@ -162,4 +162,16 @@ class ClientController extends AbstractController
         return new JsonResponse('Client supprimée !', 202);
     }
 
+    #[Route('/export/clients', name: 'app_clients_export')]
+    public  function export(Request $request,): Response
+    {
+        $user = $this->annuaire->getUser($request);
+        $clients = $this->clientRepository->findBy(['user' => $user]);
+
+        $response = $this->transformService->exportClients($clients);
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+
+        return $response;
+    }
+
 }

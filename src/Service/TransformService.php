@@ -9,6 +9,7 @@ use App\Entity\Entreprise;
 use App\Entity\Prestation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class TransformService
 {
@@ -140,6 +141,103 @@ class TransformService
         }
 
         return $devis;
+    }
+
+    public function createCsv(array $list, string $fileName): Response
+    {
+        $fp = fopen('php://temp', 'w');
+        foreach ($list as $fields) {
+            fputcsv($fp, $fields);
+        }
+
+        rewind($fp);
+        $response = new Response(stream_get_contents($fp));
+        fclose($fp);
+
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename=' . $fileName . '.csv');
+
+        return $response;
+    }
+
+    // Export csv des devis
+    public function exportDevis(array $devis)
+    {
+        // Entêtes
+        $list = [[
+            'id',
+            'reference',
+            'crée le',
+            'mise à jour le',
+            'supprimé le',
+            'date de validité',
+            'payé le',
+            'date de début de prestation',
+            'client id',
+            'total HT',
+            'TVA',
+            'total TTC',
+            'termes & conditions'
+        ]];
+
+        // Contenu
+        foreach ($devis as $d) {
+            $list[] = [
+                $d->getId(),
+                $d->getReference(),
+                $d->getCreatedAt()->format('d/m/Y'),
+                $d->getUpdatedAt()? $d->getUpdatedAt()->format('d/m/Y') : null,
+                $d->getDeletedAt() ? $d->getDeletedAt()->format('d/m/Y') : null,
+                $d->getDateValidite() ? $d->getDateValidite()->format('d/m/Y') : null,
+                $d->getPaidAt() ? $d->getPaidAt()->format('d/m/Y') : null,
+                $d->getDateDebutPrestation() ? $d->getDateDebutPrestation()->format('d/m/Y') : null,
+                $d->getClient()->getId(),
+                $d->getTotalHT() ? ($d->getTotalHT() / 100) : null,
+                $d->getTva() ? ($d->getTva() / 100) : null,
+                $d->getTotalTTC() ? ($d->getTotalTTC() / 100) : null,
+                $d->getTc()
+            ];
+        }
+
+        return $this->createCsv($list, 'Devis_export');
+    }
+
+    // Export csv des clients
+    public function exportClients(array $clients)
+    {
+        // Entêtes
+        $list = [[
+            'id',
+            'nom',
+            'prenom',
+            'email',
+            'telephone',
+            'numéro',
+            'rue',
+            'adresse complémentaire',
+            'code postal',
+            'ville',
+            'pays'
+        ]];
+
+        // Contenu
+        foreach ($clients as $c) {
+            $list[] = [
+                $c->getId(),
+                $c->getNom(),
+                $c->getPrenom() ? $c->getPrenom() : null,
+                $c->getEmail() ? $c->getEmail() : null,
+                $c->getTelephone() ? $c->getTelephone() : null,
+                $c->getAdresse()->getNumero() ? $c->getAdresse()->getNumero() : null,
+                $c->getAdresse()->getRue() ? $c->getAdresse()->getRue() : null,
+                $c->getAdresse()->getComplementaire() ? $c->getAdresse()->getComplementaire() : null,
+                $c->getAdresse()->getCp()? $c->getAdresse()->getCp() : null,
+                $c->getAdresse()->getVille() ? $c->getAdresse()->getVille() : null,
+                $c->getAdresse()->getPays() ? $c->getAdresse()->getPays() : null
+            ];
+        }
+
+        return $this->createCsv($list, 'Clients_export');
     }
 
 }

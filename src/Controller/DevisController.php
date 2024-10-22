@@ -191,4 +191,16 @@ class DevisController extends AbstractController
 
         return new JsonResponse('Devis supprimée !', 202);
     }
+
+    #[Route('/export/devis', name: 'app_devis_export')]
+    public  function export(Request $request,): Response
+    {
+        $user = $this->annuaire->getUser($request);
+        $devis = $this->devisRepository->findBy(['user' => $user]);
+
+        $response = $this->transformService->exportDevis($devis);
+
+        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        return $response;
+    }
 }

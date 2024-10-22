@@ -51,6 +51,7 @@ security:
          - { path: ^/elements,       roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/entreprises,       roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/prestations,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/export,       roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/,       roles: PUBLIC_ACCESS }
 #         - { path: ^, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
