@@ -33,7 +33,7 @@ class UserController extends AbstractController
 
     //Création d’un utilisateur
     #[\Symfony\Component\Routing\Annotation\Route(
-        path: '/register', name: 'api_register', defaults: ['_api_resource_class' => User::class,], methods: ['POST']
+        path: '/api/register', name: 'api_register', defaults: ['_api_resource_class' => User::class,], methods: ['POST']
     )]
     public function register(Request $request): JsonResponse
     {
@@ -76,7 +76,7 @@ class UserController extends AbstractController
     }
 
     #[Route(
-        path: '/users-infos', name: 'app_user_show', defaults: ['_api_resource_class' => User::class,], methods: ['GET'],
+        path: '/api/users-infos', name: 'app_user_show', defaults: ['_api_resource_class' => User::class,], methods: ['GET'],
     )]
     public function show( Request $request, SerializerInterface $serializer): Response
     {
@@ -87,7 +87,7 @@ class UserController extends AbstractController
     }
 
     #[Route(
-        path: '/user-delete', name: 'app_user_delete', defaults: ['_api_resource_class' => User::class,], methods: ['DELETE'],
+        path: '/api/user-delete', name: 'app_user_delete', defaults: ['_api_resource_class' => User::class,], methods: ['DELETE'],
     )]
     public function delete( Request $request, SerializerInterface $serializer): Response
     {

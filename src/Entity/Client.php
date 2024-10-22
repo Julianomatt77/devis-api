@@ -18,11 +18,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(uriTemplate: '/clients', controller: ClientController::class, name: 'app_clients_all'),
-        new Post(uriTemplate: '/clients', controller: ClientController::class, denormalizationContext: ['groups' => ['client:write']], name: 'app_client_new'),
-        new Get(uriTemplate: '/clients/{id}', controller: ClientController::class, denormalizationContext: ['groups' => ['client:write']], name: 'app_client_show'),
-        new Delete(uriTemplate: '/clients/{id}', controller: ClientController::class, denormalizationContext: ['groups' => ['client:write']],name: 'app_client_delete'),
-        new Patch(uriTemplate: '/clients/{id}', controller: ClientController::class, denormalizationContext: ['groups' => ['client:write']], name: 'app_client_update'),
+        new GetCollection(uriTemplate: '/api/clients', controller: ClientController::class, name: 'app_clients_all'),
+        new Post(uriTemplate: '/api/clients', controller: ClientController::class, denormalizationContext: ['groups' => ['client:write']], name: 'app_client_new'),
+        new Get(uriTemplate: '/api/clients/{id}', controller: ClientController::class, denormalizationContext: ['groups' => ['client:write']], name: 'app_client_show'),
+        new Delete(uriTemplate: '/api/clients/{id}', controller: ClientController::class, denormalizationContext: ['groups' => ['client:write']],name: 'app_client_delete'),
+        new Patch(uriTemplate: '/api/clients/{id}', controller: ClientController::class, denormalizationContext: ['groups' => ['client:write']], name: 'app_client_update'),
     ],
     formats: ["json"],
 )]

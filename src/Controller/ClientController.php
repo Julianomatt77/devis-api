@@ -33,7 +33,7 @@ class ClientController extends AbstractController
     }
 
     #[Route(
-        path: '/clients', name: 'app_clients_all', defaults: ['_api_resource_class' => Client::class,], methods: ['GET'],
+        path: '/api/clients', name: 'app_clients_all', defaults: ['_api_resource_class' => Client::class,], methods: ['GET'],
     )]
     public function index(Request $request, SerializerInterface $serializer): JSONResponse
     {
@@ -46,7 +46,7 @@ class ClientController extends AbstractController
     }
 
     #[Route(
-        path: '/clients', name: 'app_client_new', defaults: ['_api_resource_class' => Client::class,], methods: ['POST'],
+        path: '/api/clients', name: 'app_client_new', defaults: ['_api_resource_class' => Client::class,], methods: ['POST'],
     )]
     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $em): JSONResponse
     {
@@ -75,7 +75,7 @@ class ClientController extends AbstractController
     }
 
     #[Route(
-        path: '/clients/{id}', name: 'app_client_show', defaults: ['_api_resource_class' => Client::class,], methods: ['GET'],
+        path: '/api/clients/{id}', name: 'app_client_show', defaults: ['_api_resource_class' => Client::class,], methods: ['GET'],
     )]
     public function show(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Client $client): JSONResponse
     {
@@ -96,7 +96,7 @@ class ClientController extends AbstractController
     }
 
     #[Route(
-        path: '/clients/{id}', name: 'app_client_update', defaults: ['_api_resource_class' => Client::class,], methods: ['PATCH'],
+        path: '/api/clients/{id}', name: 'app_client_update', defaults: ['_api_resource_class' => Client::class,], methods: ['PATCH'],
     )]
     public function edit(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Client $client): JSONResponse
     {
@@ -134,7 +134,7 @@ class ClientController extends AbstractController
     }
 
     #[Route(
-        path: '/clients/{id}', name: 'app_client_delete', defaults: ['_api_resource_class' => Client::class,], methods: ['DELETE'],
+        path: '/api/clients/{id}', name: 'app_client_delete', defaults: ['_api_resource_class' => Client::class,], methods: ['DELETE'],
     )]
     public function delete(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Client $client, Devis $devis = null): JSONResponse
     {
@@ -162,7 +162,7 @@ class ClientController extends AbstractController
         return new JsonResponse('Client supprimée !', 202);
     }
 
-    #[Route('/export/clients', name: 'app_clients_export')]
+    #[Route('/api/export/clients', name: 'app_clients_export')]
     public  function export(Request $request,): Response
     {
         $user = $this->annuaire->getUser($request);

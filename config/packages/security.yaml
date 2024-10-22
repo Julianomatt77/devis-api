@@ -13,16 +13,16 @@ security:
 
     firewalls:
         login:
-            pattern: ^/login
+            pattern: ^/api/login
             stateless: true
             json_login:
-                check_path: /login_check
+                check_path: /api/login_check
                 username_path: username
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
         api:
-            pattern: ^/
+            pattern: ^/api
             stateless: true
             jwt: ~ # enables the jwt authenticator
 
@@ -42,17 +42,17 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-         - { path: ^/register, roles: PUBLIC_ACCESS }
-         - { path: ^/login, roles: PUBLIC_ACCESS }
-         - { path: ^/contact, roles: PUBLIC_ACCESS }
-         - { path: ^/adresses,       roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/clients,       roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/devis,       roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/elements,       roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/entreprises,       roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/prestations,       roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/export,       roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/,       roles: PUBLIC_ACCESS }
+         - { path: ^/api/register, roles: PUBLIC_ACCESS }
+         - { path: ^/api/login, roles: PUBLIC_ACCESS }
+         - { path: ^/api/contact, roles: PUBLIC_ACCESS }
+         - { path: ^/api/adresses,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/clients,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/devis,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/elements,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/entreprises,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/prestations,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/export,       roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api,       roles: PUBLIC_ACCESS }
 #         - { path: ^, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 

@@ -30,7 +30,7 @@ class AdresseController extends AbstractController
     }
 
     #[Route(
-        path: '/adresses', name: 'app_adresses_all', defaults: ['_api_resource_class' => Adresse::class,], methods: ['GET'],
+        path: '/api/adresses', name: 'app_adresses_all', defaults: ['_api_resource_class' => Adresse::class,], methods: ['GET'],
     )]
     public function index(Request $request, SerializerInterface $serializer): JSONResponse
     {
@@ -43,7 +43,7 @@ class AdresseController extends AbstractController
     }
 
     #[Route(
-    path: '/adresses', name: 'app_adresse_new', defaults: ['_api_resource_class' => Adresse::class,], methods: ['POST'],
+    path: '/api/adresses', name: 'app_adresse_new', defaults: ['_api_resource_class' => Adresse::class,], methods: ['POST'],
     )]
     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $em): JSONResponse
     {
@@ -60,7 +60,7 @@ class AdresseController extends AbstractController
     }
 
     #[Route(
-        path: '/adresses/{id}', name: 'app_adresse_show', defaults: ['_api_resource_class' => Adresse::class,], methods: ['GET'],
+        path: '/api/adresses/{id}', name: 'app_adresse_show', defaults: ['_api_resource_class' => Adresse::class,], methods: ['GET'],
     )]
     public function show(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Adresse $adresse): JSONResponse
     {
@@ -81,7 +81,7 @@ class AdresseController extends AbstractController
     }
 
     #[Route(
-        path: '/adresses/{id}', name: 'app_adresse_update', defaults: ['_api_resource_class' => Adresse::class,], methods: ['PATCH'],
+        path: '/api/adresses/{id}', name: 'app_adresse_update', defaults: ['_api_resource_class' => Adresse::class,], methods: ['PATCH'],
     )]
     public function edit(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Adresse $adresse): JSONResponse
     {
@@ -107,7 +107,7 @@ class AdresseController extends AbstractController
     }
 
     #[Route(
-        path: '/adresses/{id}', name: 'app_adresse_delete', defaults: ['_api_resource_class' => Adresse::class,], methods: ['DELETE'],
+        path: '/api/adresses/{id}', name: 'app_adresse_delete', defaults: ['_api_resource_class' => Adresse::class,], methods: ['DELETE'],
     )]
     public function delete(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Adresse $adresse, Entreprise $entreprise = null, Client $client = null): JSONResponse
     {

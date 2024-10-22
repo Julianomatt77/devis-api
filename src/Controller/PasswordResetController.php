@@ -16,7 +16,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Uid\Uuid;
 
-#[Route('/password')]
+#[Route('/api/password')]
 class PasswordResetController extends AbstractController
 {
     private UserRepository $userRepository;

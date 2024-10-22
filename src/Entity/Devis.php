@@ -19,11 +19,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: DevisRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(uriTemplate: '/devis', controller: DevisController::class, name: 'app_devis_all'),
-        new Post(uriTemplate: '/devis', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_new'),
-        new Get(uriTemplate: '/devis/{id}', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_show'),
-        new Delete(uriTemplate: '/devis/{id}', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']],name: 'app_devis_delete'),
-        new Patch(uriTemplate: '/devis/{id}', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_update'),
+        new GetCollection(uriTemplate: '/api/devis', controller: DevisController::class, name: 'app_devis_all'),
+        new Post(uriTemplate: '/api/devis', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_new'),
+        new Get(uriTemplate: '/api/devis/{id}', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_show'),
+        new Delete(uriTemplate: '/api/devis/{id}', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']],name: 'app_devis_delete'),
+        new Patch(uriTemplate: '/api/devis/{id}', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_update'),
     ],
     formats: ["json"],
 )]

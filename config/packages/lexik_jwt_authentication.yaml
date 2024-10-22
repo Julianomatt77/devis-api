@@ -16,7 +16,7 @@ lexik_jwt_authentication:
         signature_algorithm: RS256
 
     api_platform:
-        check_path: /login_check
+        check_path: /api/login_check
         username_path: username
         password_path: password
 
@@ -50,7 +50,7 @@ lexik_jwt_authentication:
         jwt_hp:
             lifetime: null
             samesite: strict
-            path: /
+            path: /api
             domain: null
             httpOnly: false
             partitioned: false # Only for Symfony 6.4 or higher
@@ -61,7 +61,7 @@ lexik_jwt_authentication:
         jwt_s:
             lifetime: 604800 #1 semaine
             samesite: strict
-            path: /
+            path: /api
             domain: null
             httpOnly: true
             partitioned: false # Only for Symfony 6.4 or higher

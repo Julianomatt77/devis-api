@@ -18,11 +18,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: EntrepriseRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(uriTemplate: '/entreprises', controller: EntrepriseController::class, name: 'app_entreprises_all'),
-        new Post(uriTemplate: '/entreprises', controller: EntrepriseController::class, denormalizationContext: ['groups' => ['entreprise:write']], name: 'app_entreprise_new'),
-        new Get(uriTemplate: '/entreprises/{id}', controller: EntrepriseController::class, denormalizationContext: ['groups' => ['entreprise:write']], name: 'app_entreprise_show'),
-        new Delete(uriTemplate: '/entreprises/{id}', controller: EntrepriseController::class, denormalizationContext: ['groups' => ['entreprise:write']],name: 'app_entreprise_delete'),
-        new Patch(uriTemplate: '/entreprises/{id}', controller: EntrepriseController::class, denormalizationContext: ['groups' => ['entreprise:write']], name: 'app_entreprise_update'),
+        new GetCollection(uriTemplate: '/api/entreprises', controller: EntrepriseController::class, name: 'app_entreprises_all'),
+        new Post(uriTemplate: '/api/entreprises', controller: EntrepriseController::class, denormalizationContext: ['groups' => ['entreprise:write']], name: 'app_entreprise_new'),
+        new Get(uriTemplate: '/api/entreprises/{id}', controller: EntrepriseController::class, denormalizationContext: ['groups' => ['entreprise:write']], name: 'app_entreprise_show'),
+        new Delete(uriTemplate: '/api/entreprises/{id}', controller: EntrepriseController::class, denormalizationContext: ['groups' => ['entreprise:write']],name: 'app_entreprise_delete'),
+        new Patch(uriTemplate: '/api/entreprises/{id}', controller: EntrepriseController::class, denormalizationContext: ['groups' => ['entreprise:write']], name: 'app_entreprise_update'),
     ],
     formats: ["json"],
 )]

@@ -16,11 +16,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: PrestationRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(uriTemplate: '/prestations', controller: PrestationController::class, name: 'app_prestations_all'),
-        new Post(uriTemplate: '/prestations', controller: PrestationController::class, denormalizationContext: ['groups' => ['prestation:write']], name: 'app_prestation_new'),
-        new Get(uriTemplate: '/prestations/{id}', controller: PrestationController::class, denormalizationContext: ['groups' => ['prestation:write']], name: 'app_prestation_show'),
-        new Delete(uriTemplate: '/prestations/{id}', controller: PrestationController::class, denormalizationContext: ['groups' => ['prestation:write']],name: 'app_prestation_delete'),
-        new Patch(uriTemplate: '/prestations/{id}', controller: PrestationController::class, denormalizationContext: ['groups' => ['prestation:write']], name: 'app_prestation_update'),
+        new GetCollection(uriTemplate: '/api/prestations', controller: PrestationController::class, name: 'app_prestations_all'),
+        new Post(uriTemplate: '/api/prestations', controller: PrestationController::class, denormalizationContext: ['groups' => ['prestation:write']], name: 'app_prestation_new'),
+        new Get(uriTemplate: '/api/prestations/{id}', controller: PrestationController::class, denormalizationContext: ['groups' => ['prestation:write']], name: 'app_prestation_show'),
+        new Delete(uriTemplate: '/api/prestations/{id}', controller: PrestationController::class, denormalizationContext: ['groups' => ['prestation:write']],name: 'app_prestation_delete'),
+        new Patch(uriTemplate: '/api/prestations/{id}', controller: PrestationController::class, denormalizationContext: ['groups' => ['prestation:write']], name: 'app_prestation_update'),
     ],
     formats: ["json"],
 )]

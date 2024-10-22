@@ -40,7 +40,7 @@ class DevisController extends AbstractController
     }
 
     #[Route(
-        path: '/devis', name: 'app_devis_all', defaults: ['_api_resource_class' => Devis::class,], methods: ['GET'],
+        path: '/api/devis', name: 'app_devis_all', defaults: ['_api_resource_class' => Devis::class,], methods: ['GET'],
     )]
     public function index(Request $request, SerializerInterface $serializer): JSONResponse
     {
@@ -53,7 +53,7 @@ class DevisController extends AbstractController
     }
 
     #[Route(
-        path: '/devis', name: 'app_devis_new', defaults: ['_api_resource_class' => Devis::class,], methods: ['POST'],
+        path: '/api/devis', name: 'app_devis_new', defaults: ['_api_resource_class' => Devis::class,], methods: ['POST'],
     )]
     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $em): JSONResponse
     {
@@ -95,7 +95,7 @@ class DevisController extends AbstractController
     }
 
     #[Route(
-        path: '/devis/{id}', name: 'app_devis_show', defaults: ['_api_resource_class' => Devis::class,], methods: ['GET'],
+        path: '/api/devis/{id}', name: 'app_devis_show', defaults: ['_api_resource_class' => Devis::class,], methods: ['GET'],
     )]
     public function show(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Devis $devis): JSONResponse
     {
@@ -116,7 +116,7 @@ class DevisController extends AbstractController
     }
 
     #[Route(
-        path: '/devis/{id}', name: 'app_devis_update', defaults: ['_api_resource_class' => Devis::class,], methods: ['PATCH'],
+        path: '/api/devis/{id}', name: 'app_devis_update', defaults: ['_api_resource_class' => Devis::class,], methods: ['PATCH'],
     )]
     public function edit(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Devis $devis): JSONResponse
     {
@@ -169,7 +169,7 @@ class DevisController extends AbstractController
     }
 
     #[Route(
-        path: '/devis/{id}', name: 'app_devis_delete', defaults: ['_api_resource_class' => Devis::class,], methods: ['DELETE'],
+        path: '/api/devis/{id}', name: 'app_devis_delete', defaults: ['_api_resource_class' => Devis::class,], methods: ['DELETE'],
     )]
     public function delete(Request $request, SerializerInterface $serializer, EntityManagerInterface $em,Devis $devis): JSONResponse
     {
@@ -192,7 +192,7 @@ class DevisController extends AbstractController
         return new JsonResponse('Devis supprimée !', 202);
     }
 
-    #[Route('/export/devis', name: 'app_devis_export')]
+    #[Route('/api/export/devis', name: 'app_devis_export')]
     public  function export(Request $request,): Response
     {
         $user = $this->annuaire->getUser($request);

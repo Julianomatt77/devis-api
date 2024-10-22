@@ -18,11 +18,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: ElementRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(uriTemplate: '/elements', controller: ElementController::class, name: 'app_elements_all'),
-        new Post(uriTemplate: '/elements', controller: ElementController::class, denormalizationContext: ['groups' => ['element:write']], name: 'app_element_new'),
-        new Get(uriTemplate: '/elements/{id}', controller: ElementController::class, denormalizationContext: ['groups' => ['element:write']], name: 'app_element_show'),
-        new Delete(uriTemplate: '/elements/{id}', controller: ElementController::class, denormalizationContext: ['groups' => ['element:write']],name: 'app_element_delete'),
-        new Patch(uriTemplate: '/elements/{id}', controller: ElementController::class, denormalizationContext: ['groups' => ['element:write']], name: 'app_element_update'),
+        new GetCollection(uriTemplate: '/api/elements', controller: ElementController::class, name: 'app_elements_all'),
+        new Post(uriTemplate: '/api/elements', controller: ElementController::class, denormalizationContext: ['groups' => ['element:write']], name: 'app_element_new'),
+        new Get(uriTemplate: '/api/elements/{id}', controller: ElementController::class, denormalizationContext: ['groups' => ['element:write']], name: 'app_element_show'),
+        new Delete(uriTemplate: '/api/elements/{id}', controller: ElementController::class, denormalizationContext: ['groups' => ['element:write']],name: 'app_element_delete'),
+        new Patch(uriTemplate: '/api/elements/{id}', controller: ElementController::class, denormalizationContext: ['groups' => ['element:write']], name: 'app_element_update'),
     ],
     formats: ["json"],
 )]

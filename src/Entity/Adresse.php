@@ -18,11 +18,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: AdresseRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(uriTemplate: '/adresses', controller: AdresseController::class, name: 'app_adresses_all'),
-        new Post(uriTemplate: '/adresses', controller: AdresseController::class, denormalizationContext: ['groups' => ['adresse:write']], name: 'app_adresse_new'),
-        new Get(uriTemplate: '/adresses/{id}', controller: AdresseController::class, denormalizationContext: ['groups' => ['adresse:write']], name: 'app_adresse_show'),
-        new Delete(uriTemplate: '/adresses/{id}', controller: AdresseController::class, denormalizationContext: ['groups' => ['adresse:write']],name: 'app_adresse_delete'),
-        new Patch(uriTemplate: '/adresses/{id}', controller: AdresseController::class, denormalizationContext: ['groups' => ['adresse:write']], name: 'app_adresse_update'),
+        new GetCollection(uriTemplate: '/api/adresses', controller: AdresseController::class, name: 'app_adresses_all'),
+        new Post(uriTemplate: '/api/adresses', controller: AdresseController::class, denormalizationContext: ['groups' => ['adresse:write']], name: 'app_adresse_new'),
+        new Get(uriTemplate: '/api/adresses/{id}', controller: AdresseController::class, denormalizationContext: ['groups' => ['adresse:write']], name: 'app_adresse_show'),
+        new Delete(uriTemplate: '/api/adresses/{id}', controller: AdresseController::class, denormalizationContext: ['groups' => ['adresse:write']],name: 'app_adresse_delete'),
+        new Patch(uriTemplate: '/api/adresses/{id}', controller: AdresseController::class, denormalizationContext: ['groups' => ['adresse:write']], name: 'app_adresse_update'),
     ],
     formats: ["json"],
 )]

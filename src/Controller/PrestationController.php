@@ -41,7 +41,7 @@ class PrestationController extends AbstractController
     }
 
     #[Route(
-    path: '/prestations', name: 'app_prestations_all', defaults: ['_api_resource_class' => Prestation::class,], methods: ['GET'],
+    path: '/api/prestations', name: 'app_prestations_all', defaults: ['_api_resource_class' => Prestation::class,], methods: ['GET'],
     )]
     public function index(Request $request, SerializerInterface $serializer): JSONResponse
     {
@@ -54,7 +54,7 @@ class PrestationController extends AbstractController
     }
 
     #[Route(
-    path: '/prestations', name: 'app_prestation_new', defaults: ['_api_resource_class' => Prestation::class,], methods: ['POST'],
+    path: '/api/prestations', name: 'app_prestation_new', defaults: ['_api_resource_class' => Prestation::class,], methods: ['POST'],
     )]
     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $em): JSONResponse
     {
@@ -97,7 +97,7 @@ class PrestationController extends AbstractController
     }
 
     #[Route(
-    path: '/prestations/{id}', name: 'app_prestation_show', defaults: ['_api_resource_class' => Prestation::class,], methods: ['GET'],
+    path: '/api/prestations/{id}', name: 'app_prestation_show', defaults: ['_api_resource_class' => Prestation::class,], methods: ['GET'],
     )]
     public function show(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Prestation $prestation): JSONResponse
     {
@@ -118,7 +118,7 @@ class PrestationController extends AbstractController
     }
 
     #[Route(
-    path: '/prestations/{id}', name: 'app_prestation_update', defaults: ['_api_resource_class' => Prestation::class,], methods: ['PATCH'],
+    path: '/api/prestations/{id}', name: 'app_prestation_update', defaults: ['_api_resource_class' => Prestation::class,], methods: ['PATCH'],
     )]
     public function edit(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Prestation $prestation, RouterInterface $router)
     {
@@ -175,7 +175,7 @@ class PrestationController extends AbstractController
     }
 
     #[Route(
-    path: '/prestations/{id}', name: 'app_prestation_delete', defaults: ['_api_resource_class' => Prestation::class,], methods: ['DELETE'],
+    path: '/api/prestations/{id}', name: 'app_prestation_delete', defaults: ['_api_resource_class' => Prestation::class,], methods: ['DELETE'],
     )]
     public function delete(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Prestation $prestation): JSONResponse
     {

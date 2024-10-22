@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ContactController extends AbstractController
 {
-    #[Route(path: '/contact', name: 'send_contact_form')]
+    #[Route(path: '/api/contact', name: 'send_contact_form')]
     public function contactMe(Request $request, EmailService $emailService): Response
     {
         $content = json_decode($request->getContent(), true);

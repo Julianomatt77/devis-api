@@ -21,11 +21,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
 #[ApiResource(
     operations: [
-        new Get(uriTemplate: '/users-infos', controller: UserController::class, denormalizationContext: ['groups' => ['user:read']], name: 'app_user_show'),
-        new Post(uriTemplate: '/register', controller: UserController::class, denormalizationContext: ['groups' => ['user:write']], name: 'api_register'),
-        new Delete(uriTemplate: '/user-delete', controller: UserController::class, denormalizationContext: ['groups' => ['user:write']], name: 'app_user_delete'),
-        new Post(uriTemplate: '/password/forgot', controller: PasswordResetController::class, denormalizationContext: ['groups' => ['email:write']], name: 'password_forgot'),
-        new Patch(uriTemplate: '/password/reset/{token}', controller: PasswordResetController::class, denormalizationContext: ['groups' => ['password:write']], name: 'password_reset'),
+        new Get(uriTemplate: '/api/users-infos', controller: UserController::class, denormalizationContext: ['groups' => ['user:read']], name: 'app_user_show'),
+        new Post(uriTemplate: '/api/register', controller: UserController::class, denormalizationContext: ['groups' => ['user:write']], name: 'api_register'),
+        new Delete(uriTemplate: '/api/user-delete', controller: UserController::class, denormalizationContext: ['groups' => ['user:write']], name: 'app_user_delete'),
+        new Post(uriTemplate: '/api/password/forgot', controller: PasswordResetController::class, denormalizationContext: ['groups' => ['email:write']], name: 'password_forgot'),
+        new Patch(uriTemplate: '/api/password/reset/{token}', controller: PasswordResetController::class, denormalizationContext: ['groups' => ['password:write']], name: 'password_reset'),
     ],
     formats: ["json"],
 )]

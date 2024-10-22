@@ -34,7 +34,7 @@ class EntrepriseController extends AbstractController
     }
 
     #[Route(
-        path: '/entreprises', name: 'app_entreprises_all', defaults: ['_api_resource_class' => Client::class,], methods: ['GET'],
+        path: '/api/entreprises', name: 'app_entreprises_all', defaults: ['_api_resource_class' => Client::class,], methods: ['GET'],
     )]
     public function index(Request $request, SerializerInterface $serializer): JSONResponse
     {
@@ -47,7 +47,7 @@ class EntrepriseController extends AbstractController
     }
 
     #[Route(
-        path: '/entreprises', name: 'app_entreprise_new', defaults: ['_api_resource_class' => Entreprise::class,], methods: ['POST'],
+        path: '/api/entreprises', name: 'app_entreprise_new', defaults: ['_api_resource_class' => Entreprise::class,], methods: ['POST'],
     )]
     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $em): JSONResponse
     {
@@ -75,7 +75,7 @@ class EntrepriseController extends AbstractController
     }
 
     #[Route(
-        path: '/entreprises/{id}', name: 'app_entreprise_show', defaults: ['_api_resource_class' => Client::class,], methods: ['GET'],
+        path: '/api/entreprises/{id}', name: 'app_entreprise_show', defaults: ['_api_resource_class' => Client::class,], methods: ['GET'],
     )]
     public function show(Request $request, SerializerInterface $serializer, Entreprise $entreprise): JSONResponse
     {
@@ -96,7 +96,7 @@ class EntrepriseController extends AbstractController
     }
 
     #[Route(
-        path: '/entreprises/{id}', name: 'app_entreprise_update', defaults: ['_api_resource_class' => Entreprise::class,], methods: ['PATCH'],
+        path: '/api/entreprises/{id}', name: 'app_entreprise_update', defaults: ['_api_resource_class' => Entreprise::class,], methods: ['PATCH'],
     )]
     public function edit(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Entreprise $entreprise): JSONResponse
     {
@@ -134,7 +134,7 @@ class EntrepriseController extends AbstractController
     }
 
     #[Route(
-        path: '/entreprises/{id}', name: 'app_entreprise_delete', defaults: ['_api_resource_class' => Entreprise::class,], methods: ['DELETE'],
+        path: '/api/entreprises/{id}', name: 'app_entreprise_delete', defaults: ['_api_resource_class' => Entreprise::class,], methods: ['DELETE'],
     )]
     public function delete(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Entreprise $entreprise): JSONResponse
     {

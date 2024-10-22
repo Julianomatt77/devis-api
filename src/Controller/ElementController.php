@@ -29,7 +29,7 @@ class ElementController extends AbstractController
     }
 
     #[Route(
-        path: '/elements', name: 'app_elements_all', defaults: ['_api_resource_class' => Element::class,], methods: ['GET'],
+        path: '/api/elements', name: 'app_elements_all', defaults: ['_api_resource_class' => Element::class,], methods: ['GET'],
     )]
     public function index(Request $request, SerializerInterface $serializer): JSONResponse
     {
@@ -42,7 +42,7 @@ class ElementController extends AbstractController
     }
 
     #[Route(
-        path: '/elements', name: 'app_element_new', defaults: ['_api_resource_class' => Element::class,], methods: ['POST'],
+        path: '/api/elements', name: 'app_element_new', defaults: ['_api_resource_class' => Element::class,], methods: ['POST'],
     )]
     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $em): JSONResponse
     {
@@ -59,7 +59,7 @@ class ElementController extends AbstractController
     }
 
     #[Route(
-        path: '/elements/{id}', name: 'app_element_show', defaults: ['_api_resource_class' => Element::class,], methods: ['GET'],
+        path: '/api/elements/{id}', name: 'app_element_show', defaults: ['_api_resource_class' => Element::class,], methods: ['GET'],
     )]
     public function show(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Element $element): JSONResponse
     {
@@ -80,7 +80,7 @@ class ElementController extends AbstractController
     }
 
     #[Route(
-        path: '/elements/{id}', name: 'app_element_update', defaults: ['_api_resource_class' => Element::class,], methods: ['PATCH'],
+        path: '/api/elements/{id}', name: 'app_element_update', defaults: ['_api_resource_class' => Element::class,], methods: ['PATCH'],
     )]
     public function edit(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Element $element): JSONResponse
     {
@@ -106,7 +106,7 @@ class ElementController extends AbstractController
     }
 
     #[Route(
-        path: '/elements/{id}', name: 'app_element_delete', defaults: ['_api_resource_class' => Element::class,], methods: ['DELETE'],
+        path: '/api/elements/{id}', name: 'app_element_delete', defaults: ['_api_resource_class' => Element::class,], methods: ['DELETE'],
     )]
     public function delete(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Element $element): JSONResponse
     {
