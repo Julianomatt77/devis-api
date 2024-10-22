@@ -4,7 +4,7 @@
 /.env.local.php
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
+#/public/bundles/
 /var/
 /vendor/
 .idea/
@@ -22,7 +22,7 @@ composer.lock
 ###< symfony/phpunit-bridge ###
 
 ###> symfony/asset-mapper ###
-/public/bundles/
+#/public/bundles/
 /assets/vendor/
 ###< symfony/asset-mapper ###
 
