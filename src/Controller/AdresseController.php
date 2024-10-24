@@ -35,7 +35,7 @@ class AdresseController extends AbstractController
     public function index(Request $request, SerializerInterface $serializer): JSONResponse
     {
         $user = $this->annuaire->getUser($request);
-        $adresses = $this->adresseRepository->findBy(['user' => $user]);
+        $adresses = $this->adresseRepository->findBy(['user' => $user], ['id' => 'desc']);
 
         $json = $serializer->serialize($adresses, 'json', ['groups' => 'adresse:read']);
 

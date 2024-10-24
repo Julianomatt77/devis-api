@@ -45,7 +45,7 @@ class DevisController extends AbstractController
     public function index(Request $request, SerializerInterface $serializer): JSONResponse
     {
         $user = $this->annuaire->getUser($request);
-        $devis = $this->devisRepository->findBy(['user' => $user]);
+        $devis = $this->devisRepository->findBy(['user' => $user], ['id' => 'desc']);
 
         $json = $serializer->serialize($devis, 'json', ['groups' => 'devis:read']);
 

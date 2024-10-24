@@ -46,7 +46,7 @@ class PrestationController extends AbstractController
     public function index(Request $request, SerializerInterface $serializer): JSONResponse
     {
         $user = $this->annuaire->getUser($request);
-        $prestations = $this->prestationRepository->findBy(['user' => $user]);
+        $prestations = $this->prestationRepository->findBy(['user' => $user], ['id' => 'desc']);
 
         $json = $serializer->serialize($prestations, 'json', ['groups' => 'prestation:read']);
 

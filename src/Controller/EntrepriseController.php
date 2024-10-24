@@ -39,7 +39,7 @@ class EntrepriseController extends AbstractController
     public function index(Request $request, SerializerInterface $serializer): JSONResponse
     {
         $user = $this->annuaire->getUser($request);
-        $clients = $this->entrepriseRepository->findBy(['user' => $user]);
+        $clients = $this->entrepriseRepository->findBy(['user' => $user], ['id' => 'desc']);
 
         $json = $serializer->serialize($clients, 'json', ['groups' => ['entreprise:read', 'client:read']]);
 

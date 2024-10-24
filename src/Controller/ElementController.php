@@ -34,7 +34,7 @@ class ElementController extends AbstractController
     public function index(Request $request, SerializerInterface $serializer): JSONResponse
     {
         $user = $this->annuaire->getUser($request);
-        $adresses = $this->elementRepository->findBy(['user' => $user]);
+        $adresses = $this->elementRepository->findBy(['user' => $user], ['id' => 'desc']);
 
         $json = $serializer->serialize($adresses, 'json', ['groups' => 'element:read']);
 
