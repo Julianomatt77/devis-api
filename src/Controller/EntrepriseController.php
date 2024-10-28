@@ -159,6 +159,6 @@ class EntrepriseController extends AbstractController
         $em->remove($entreprise);
         $em->flush();
 
-        return new JsonResponse(['message' => 'Entreprise supprimée avec succès'], 202);
+        return new JsonResponse( 'Entreprise supprimée avec succès', 202);
     }
 }
