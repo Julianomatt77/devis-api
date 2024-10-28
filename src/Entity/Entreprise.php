@@ -35,43 +35,43 @@ class Entreprise
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write', 'devis:read'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write', 'devis:read'])]
     private ?string $siret = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write', 'devis:read'])]
     private ?string $codeApe = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read','entreprise:read', 'entreprise:write'])]
+    #[Groups(['adresse:read', 'user:read','entreprise:read', 'entreprise:write', 'devis:read'])]
     private ?string $tvaIntracom = null;
 
     #[ORM\ManyToOne(inversedBy: 'entreprises')]
-    #[Groups(['entreprise:read', 'entreprise:write'])]
+    #[Groups(['entreprise:read', 'entreprise:write', 'devis:read'])]
     private ?Adresse $adresse = null;
 
     #[ORM\Column(length: 10, nullable: true)]
-    #[Groups(['adresse:read', 'user:read','entreprise:read', 'entreprise:write'])]
+    #[Groups(['adresse:read', 'user:read','entreprise:read', 'entreprise:write', 'devis:read'])]
     private ?string $telephone1 = null;
 
     #[ORM\Column(length: 10, nullable: true)]
-    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write', 'devis:read'])]
     private ?string $telephone2 = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write', 'devis:read'])]
     private ?string $web = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write', 'devis:read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write'])]
+    #[Groups(['adresse:read', 'user:read', 'entreprise:read', 'entreprise:write', 'devis:read'])]
     private ?string $contact = null;
 
     /**

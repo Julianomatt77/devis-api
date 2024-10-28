@@ -35,27 +35,27 @@ class Adresse
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read', 'devis:read'])]
     private ?int $numero = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read', 'devis:read'])]
     private ?string $rue = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read', 'devis:read'])]
     private ?string $complementaire = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read', 'devis:read'])]
     private ?string $cp = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read', 'devis:read'])]
     private ?string $ville = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read'])]
+    #[Groups(['adresse:read', 'adresse:write', 'user:read', 'client:read', 'devis:read'])]
     private ?string $pays = null;
 
     /**

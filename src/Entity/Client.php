@@ -35,23 +35,23 @@ class Client
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['adresse:read', 'user:read', 'client:read', 'client:write'])]
+    #[Groups(['adresse:read', 'user:read', 'client:read', 'client:write', 'devis:read'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read', 'client:read', 'client:write'])]
+    #[Groups(['adresse:read', 'user:read', 'client:read', 'client:write', 'devis:read'])]
     private ?string $prenom = null;
 
     #[ORM\ManyToOne(inversedBy: 'clients')]
-    #[Groups(['client:read', 'client:write'])]
+    #[Groups(['client:read', 'client:write', 'devis:read'])]
     private ?Adresse $adresse = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['adresse:read', 'user:read', 'client:read', 'client:write'])]
+    #[Groups(['adresse:read', 'user:read', 'client:read', 'client:write', 'devis:read'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 10, nullable: true)]
-    #[Groups(['adresse:read', 'user:read', 'client:read', 'client:write'])]
+    #[Groups(['adresse:read', 'user:read', 'client:read', 'client:write', 'devis:read'])]
     private ?string $telephone = null;
 
     /**
