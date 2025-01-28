@@ -240,4 +240,110 @@ class TransformService
         return $this->createCsv($list, 'Clients_export');
     }
 
+    public function transformDevisDataForPdf(Devis $devis) {
+        if (!$devis) {
+            return [
+                'entrepriseNom' => '',
+                'entrepriseAdresseRue' => '',
+                'entrepriseAdresseVille' => '',
+                'clientNom' => '',
+                'clientPrenom' => '',
+                'clientAdresseRue' => '',
+                'clientAdresseVille' => '',
+                'contactClient' => 'Contact non disponible',
+                'createdAtDate' => '',
+                'updatedAtDate' => '',
+                'paidAtDate' => null,
+                'debutAtDate' => 'À définir',
+                'validite' => '',
+                'prixHtCalcule' => 0,
+                'tvaCalcule' => 0,
+                'totalTTCCalcule' => 0,
+                'prestations' => '',
+                'tc' => '',
+                'paid' => ''
+            ];
+        }
+
+        $entreprise = $devis->getEntreprise() ?? null;
+        $client = $devis->getClient() ?? null;
+
+        $entrepriseContact = $entreprise && $entreprise->getContact() ? $entreprise->getContact() : '';
+        $entrepriseAdresseRue = $entreprise && $entreprise->getAdresse() ? AdresseFormatter::stringAdresseRue($entreprise->getAdresse()) : '';
+        $entrepriseAdresseVille = $entreprise && $entreprise->getAdresse() ? AdresseFormatter::stringAdresseVille($entreprise->getAdresse()) : '';
+        $clientAdresseRue = $client && $client->getAdresse() ? AdresseFormatter::stringAdresseRue($client->getAdresse()) : '';
+        $clientAdresseVille = $client && $client->getAdresse() ? AdresseFormatter::stringAdresseVille($client->getAdresse()) : '';
+        $contactClient = $client->getEmail() ?? $client->getTelephone() ?? 'Contact non disponible';
+        $paid = $devis->getPaidAt() ? 'checked' : '';
+        $createdAt = $devis->getCreatedAt()->format('d/m/Y');
+        $updatedAt = $devis->getUpdatedAt() ? $devis->getUpdatedAt()->format('d/m/Y') : $createdAt;
+        $paidAt = $devis->getPaidAt() ? $devis->getPaidAt()->format('d/m/Y') : null;
+        $debutAt = $devis->getDateDebutPrestation() ? $devis->getDateDebutPrestation()->format('d/m/Y') : 'À définir';
+        $validite = $devis->getDateValidite() ? $devis->getDateValidite()->format('d/m/Y') : '';
+        $prestations = $this->getPrestations($devis->getPrestations());
+
+        return [
+            'entrepriseContact' => $entrepriseContact,
+            'entrepriseNom' => $entreprise->getNom() ?? '',
+            'entrepriseAdresseRue' => $entrepriseAdresseRue,
+            'entrepriseAdresseVille' => $entrepriseAdresseVille,
+            'clientNom' => $client->getNom() ?? '',
+            'clientPrenom' => $client->getPrenom() ?? '',
+            'clientAdresseRue' => $clientAdresseRue,
+            'clientAdresseVille' => $clientAdresseVille,
+            'contactClient' => $contactClient,
+            'createdAtDate' => $createdAt ?? '',
+            'updatedAtDate' => $updatedAt,
+            'paidAtDate' => $paidAt,
+            'debutAtDate' => $debutAt,
+            'validite' => $validite,
+            'prixHtCalcule' => $this->transformPriceToEuro($devis->getTotalHT() ?? 0),
+            'tvaCalcule' => $this->transformPriceToEuro($devis->getTva() ?? 0),
+            'totalTTCCalcule' => $this->transformPriceToEuro($devis->getTotalTTC() ?? 0),
+            'prestations' => $prestations,
+            'tc' => $devis->getTc() ?? '',
+            'paid' => $paid
+        ];
+
+    }
+
+//    public static function formatDate(string $dateString): string
+//    {
+//        $date = new \DateTime($dateString);
+//        return $date->format('d/m/Y');
+//    }
+//
+//    public static function transformDateTimeToDate(string $dateTime): string
+//    {
+//        $date = new \DateTime($dateTime);
+//        return $date->format('Y-m-d');
+//    }
+
+    public static function transformPriceToEuro(int $price): string
+    {
+        return number_format($price / 100, 2, ',', ' ') . ' €';
+    }
+
+    public function getPrestations($prestations): array
+    {
+        $prestationsList = [];
+        foreach ($prestations as $prestation) {
+            $elementRepository = $this->em->getRepository(Element::class);
+            $element = $elementRepository->findOneBy(['id' => $prestation->getElement()->getId()])->getNom();
+
+            $prestationsList[] = [
+                'id' => $prestation->getId(),
+                'element' => $element,
+                'prixHT' => $this->transformPriceToEuro($prestation->getPrixHT()),
+                'qty' => $prestation->getQty(),
+                'totalHT' => $this->transformPriceToEuro($prestation->getTotalHT()),
+                'totalTTC' => $this->transformPriceToEuro($prestation->getTotalTTC()),
+                'tvaPercentage' => $prestation->getTvaPercentage(),
+                'tva' => $this->transformPriceToEuro($prestation->getTva())
+                ];
+        }
+
+        return $prestationsList;
+    }
+
 }

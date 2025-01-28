@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Controller\DevisController;
 use App\Repository\DevisRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,13 +20,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: DevisRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(uriTemplate: '/api/devis', controller: DevisController::class, name: 'app_devis_all'),
-        new Post(uriTemplate: '/api/devis', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_new'),
-        new Get(uriTemplate: '/api/devis/{id}', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_show'),
-        new Delete(uriTemplate: '/api/devis/{id}', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']],name: 'app_devis_delete'),
-        new Patch(uriTemplate: '/api/devis/{id}', controller: DevisController::class, denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_update'),
+        new GetCollection(uriTemplate: '/api/devis', name: 'app_devis_all'),
+        new Post(uriTemplate: '/api/devis', denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_new'),
+        new Get(uriTemplate: '/api/devis/{id}', denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_show'),
+        new Delete(uriTemplate: '/api/devis/{id}',denormalizationContext: ['groups' => ['devis:write']],name: 'app_devis_delete'),
+        new Patch(uriTemplate: '/api/devis/{id}', denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_update'),
+        new Get(
+            uriTemplate: '/api/devis/{id}/export',
+            openapi: new Operation(
+                summary: 'Export a quotation in pdf',
+                description: 'This operation export the quotation in PDF format.',),
+            denormalizationContext: ['groups' => ['devis:read']],
+            name: 'app_devis_export_pdf'),
     ],
     formats: ["json"],
+    controller: DevisController::class
 )]
 class Devis
 {

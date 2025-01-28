@@ -9,7 +9,13 @@ use App\Service\AnnuaireService;
 use App\Service\DataService;
 use App\Service\TransformService;
 use Doctrine\ORM\EntityManagerInterface;
+use Spiritix\Html2Pdf\Converter;
+use Spiritix\Html2Pdf\Input\StringInput;
+use Spiritix\Html2Pdf\Input\UrlInput;
+use Spiritix\Html2Pdf\Output\DownloadOutput;
+use Spiritix\Html2Pdf\Output\FileOutput;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -192,6 +198,7 @@ class DevisController extends AbstractController
         return new JsonResponse('Devis supprimée !', 202);
     }
 
+    // Export csv des devis
     #[Route('/api/export/devis', name: 'app_devis_export')]
     public  function export(Request $request,): Response
     {
@@ -202,5 +209,105 @@ class DevisController extends AbstractController
 
         $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
         return $response;
+    }
+
+    #[Route(
+        path: '/api/devis/{id}/export', name: 'app_devis_export_pdf', defaults: ['_api_resource_class' => Devis::class,], methods: ['GET'],
+    )]
+    #[OA\Parameter(
+        name: 'userId',
+        description: 'Id of the user to find',
+        in: 'query',
+    )]
+    public function export_pdf(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Devis $devis): Response
+    {
+        $user = $this->annuaire->getUser($request);
+        $devis = $this->devisRepository->findOneBy(['id' => $devis->getId(), 'user'=> $user]);
+
+        if (!$devis) {
+            return new JsonResponse(['error' => 'Devis introuvable'], 404);
+        }
+
+        if ($devis->getUser() !== $user) {
+            return new JsonResponse(['error' => 'Utilisateur non autorisé'], 403);
+        }
+
+        $dataTransformed = $this->transformService->transformDevisDataForPdf($devis);
+
+        $html = $this->renderView('devis_template_pdf.html.twig', [
+            'devis' => $devis,
+            'data' => $dataTransformed
+        ]);
+
+        $tempDir = $this->getParameter('kernel.project_dir') . '/var/pdf';
+        $filesystem = new Filesystem();
+
+        if (!$filesystem->exists($tempDir)) {
+            $filesystem->mkdir($tempDir, 0755);
+        }
+
+        $filename = $tempDir . '/devis-' . $devis->getReference() . '.html';
+        file_put_contents($filename, $html);
+
+        $this->download_pdf($devis->getReference());
+
+        return new JsonResponse([
+            'message' => 'HTML exporté avec succès.' . $devis->getReference() . '/download',
+            'link' => $this->getParameter('app.base_url') . '/devis/' . $devis->getReference() . '/download',
+
+        ], 200);
+    }
+
+    #[Route(
+        path: '/devis/{reference}/download', name: 'app_devis_download_pdf', methods: ['GET'],
+    )]
+    public function download_pdf(string $reference): Response
+    {
+        $tempDir = $this->getParameter('kernel.project_dir') . '/var/pdf';
+        $htmlFilePath = $tempDir . '/devis-' . $reference . '.html';
+
+        if (!file_exists($htmlFilePath)) {
+            return new JsonResponse(['error' => 'Fichier HTML introuvable'], 404);
+        }
+
+        $htmlContent = file_get_contents($htmlFilePath);
+        if ($htmlContent === false) {
+            return new JsonResponse(['error' => 'Impossible de lire le fichier HTML'], 500);
+        }
+
+        $input = new StringInput();
+        $input->setHtml($htmlContent);
+
+        $output = new DownloadOutput();
+        $converter = new Converter($input, $output);
+
+        $converter->setOptions([
+            'printBackground' => true,
+            'displayHeaderFooter' => false,
+            'format' => 'A4',
+            'disable-pdf-compression' => true,
+            'scale' => 1.2,
+            'dpi' => 300,
+        ]);
+
+        $converter->setLaunchOptions([
+            'ignoreHTTPSErrors' => true,
+            'headless' => true,
+            'executablePath' => '/usr/bin/google-chrome-stable',
+            'args' => [
+                '--no-sandbox',
+                '--disable-web-security',
+            ],
+        ]);
+
+        $output = $converter->convert();
+        $output->download("devis-" . $reference . ".pdf");
+        exit;
+
+//
+//        return new Response($pdfContent, 200, [
+//            'Content-Type' => 'application/pdf',
+//            'Content-Disposition' => 'attachment; filename="devis-' . $id . '.pdf"',
+//        ]);
     }
 }
