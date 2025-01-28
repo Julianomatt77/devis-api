@@ -1,0 +1,532 @@
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Devis {{ devis.reference }}</title>
+    <style>
+        :root {
+            --foreground: 224 71.4% 4.1%;
+            --card: 0 0% 100%;
+            --card-foreground: 224 71.4% 4.1%;
+            --popover: 0 0% 100%;
+            --popover-foreground: 224 71.4% 4.1%;
+            --primary-foreground: 210 20% 98%;
+            --secondary-foreground: 220.9 39.3% 11%;
+            --muted: 220 14.3% 95.9%;
+            --muted-foreground: 220 8.9% 46.1%;
+            --accent-foreground: 220.9 39.3% 11%;
+            --destructive: 0 84.2% 60.2%;
+            --destructive-foreground: 210 20% 98%;
+            --border: 220 13% 91%;
+            --input: 220 13% 91%;
+            --ring: 224 71.4% 4.1%;
+            --chart-1: 12 76% 61%;
+            --chart-2: 173 58% 39%;
+            --chart-3: 197 37% 24%;
+            --chart-4: 43 74% 66%;
+            --chart-5: 27 87% 67%;
+            --radius: 0.5rem;
+            --sidebar-background: 0 0% 98%;
+            --sidebar-foreground: 240 5.3% 26.1%;
+            --sidebar-primary: 240 5.9% 10%;
+            --sidebar-primary-foreground: 0 0% 98%;
+            --sidebar-accent: 240 4.8% 95.9%;
+            --sidebar-accent-foreground: 240 5.9% 10%;
+            --sidebar-border: 220 13% 91%;
+            --sidebar-ring: 217.2 91.2% 59.8%;
+            --text: 233 41% 8%;
+            --background: 231 25% 90%;
+            --primary: 232 52% 28%;
+            --secondary: 232 58% 67%;
+            --accent: 232 64% 50%;
+            --text-50: 234 38% 95%;
+            --text-100: 234 41% 90%;
+            --text-200: 233 41% 80%;
+            --text-300: 233 41% 70%;
+            --text-400: 233 41% 60%;
+            --text-500: 233 41% 50%;
+            --text-600: 233 41% 40%;
+            --text-700: 233 41% 30%;
+            --text-800: 233 41% 20%;
+            --text-900: 234 41% 10%;
+            --text-950: 234 38% 5%;
+
+            --background-50: 230 23% 95%;
+            --background-100: 231 25% 90%;
+            --background-200: 231 25% 80%;
+            --background-300: 231 25% 70%;
+            --background-400: 232 25% 60%;
+            --background-500: 231 25% 50%;
+            --background-600: 232 25% 40%;
+            --background-700: 231 25% 30%;
+            --background-800: 231 25% 20%;
+            --background-900: 231 25% 10%;
+            --background-950: 230 23% 5%;
+
+            --primary-50: 235 52% 95%;
+            --primary-100: 231 53% 90%;
+            --primary-200: 231 53% 80%;
+            --primary-300: 232 52% 70%;
+            --primary-400: 232 52% 60%;
+            --primary-500: 232 52% 50%;
+            --primary-600: 232 52% 40%;
+            --primary-700: 232 52% 30%;
+            --primary-800: 231 53% 20%;
+            --primary-900: 231 53% 10%;
+            --primary-950: 231 52% 5%;
+
+            --secondary-50: 232 60% 95%;
+            --secondary-100: 232 57% 90%;
+            --secondary-200: 232 59% 80%;
+            --secondary-300: 232 58% 70%;
+            --secondary-400: 232 58% 60%;
+            --secondary-500: 232 58% 50%;
+            --secondary-600: 232 58% 40%;
+            --secondary-700: 232 58% 30%;
+            --secondary-800: 232 59% 20%;
+            --secondary-900: 232 57% 10%;
+            --secondary-950: 232 60% 5%;
+
+            --accent-50: 232 62% 95%;
+            --accent-100: 231 65% 90%;
+            --accent-200: 232 65% 80%;
+            --accent-300: 232 63% 70%;
+            --accent-400: 232 64% 60%;
+            --accent-500: 232 64% 50%;
+            --accent-600: 232 64% 40%;
+            --accent-700: 232 63% 30%;
+            --accent-800: 232 65% 20%;
+            --accent-900: 231 65% 10%;
+            --accent-950: 233 62% 5%;
+        }
+
+        * {
+            box-sizing: border-box;
+            color: hsl(var(--text));
+        }
+        .flex {
+            display: flex;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .text-text-100 {
+            color: hsl(var(--text-100));
+        }
+
+        .text-text-900 {
+            color: hsl(var(--text-900));
+        }
+
+        .ml-auto {
+            margin-left: auto;
+        }
+
+        .font-normal {
+            font-weight: normal;
+        }
+
+        .font-bold {
+            font-weight: bold;
+        }
+
+        .text-xs {
+            font-size: 0.75rem;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .border-b {
+            border-bottom: 1px solid hsl(var(--primary));
+        }
+
+        .uppercase {
+            text-transform: uppercase;
+        }
+
+        .capitalize {
+            text-transform: capitalize;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .underline {
+            text-decoration: underline;
+        }
+
+        .justify-items-center {
+            justify-items: center;
+        }
+
+        .justify-items-end{
+            justify-items: flex-end;
+        }
+
+        .items-between {
+            align-items: space-between;
+        }
+
+        .items-start {
+            align-items: flex-start;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-start {
+            justify-content: flex-start;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+
+        .items-end {
+            align-items: flex-end;
+        }
+
+        .justify-start {
+            justify-content: flex-start;
+        }
+
+        .p-0 {
+            padding: 0;
+        }
+
+        .p-4 {
+            padding: 1rem;
+        }
+
+        .mb-0 {
+            margin: 0;
+        }
+
+        .mb-0 {
+            margin: 0;
+        }
+
+        .m-4 {
+            margin: 1rem;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .mb-0 {
+            margin-bottom: 0;
+        }
+
+        .pb-0 {
+            padding-bottom: 0;
+        }
+
+        .mb-1 {
+            margin-bottom: 0.25rem;
+        }
+
+        .gap-0 {
+            gap: 0;
+        }
+
+        .gap-1 {
+            gap: 0.25rem;
+        }
+
+        .gap-2 {
+            gap: 0.5rem;
+        }
+
+        .gap-4 {
+            gap: 1rem;
+        }
+
+        .gap-x-4 {
+            column-gap: 1rem;
+        }
+
+        .gap-x-2 {
+            column-gap: 0.5rem;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-cols-7 {
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-items-center {
+            justify-items: center;
+        }
+
+        .border-none {
+            border: none;
+        }
+
+        .min-h-32 {
+            min-height: 8rem;
+        }
+
+        .text-4xl {
+            font-size: 2.25rem;
+        }
+
+        .font-bold {
+            font-weight: bold;
+        }
+
+        .border {
+            border: 1px solid black;
+        }
+
+        .bg-primary {
+            background-color: hsl(var(--primary-100));
+        }
+
+        .rounded {
+            border-radius: 0.5rem;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .font-normal {
+            font-weight: normal;
+        }
+
+        .min-h-32 {
+            min-height: 8rem;
+        }
+
+        .p-2 {
+            padding: 0.5rem;
+        }
+
+        .px-2 {
+            padding-right: 0.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-items-center {
+            justify-items: center;
+        }
+
+        .text-xs {
+            font-size: 0.75rem;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .gap-x-2 {
+            column-gap: 0.5rem;
+        }
+
+        .items-between {
+            align-items: space-between;
+        }
+
+        .ml-auto {
+            margin-left: auto;
+        }
+
+        .grid-cols-7 {
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .pdf {
+            width: 210mm; /* Largeur exacte d'une page A4 */
+            min-height: 297mm; /* Hauteur minimale d'une page A4 */
+            margin: 10mm auto; /* Marges pour s'aligner au format PDF */
+            page-break-inside: avoid; /* Empêche les coupures internes */
+            overflow: visible; /* Permet aux sections de s'afficher pleinement */
+        }
+
+        .pdf-section {
+            page-break-after: always; /* Force un saut de page après chaque section */
+            break-inside: avoid; /* Empêche les coupures à l'intérieur des sections */
+        }
+
+        .pdf p {
+            page-break-inside: avoid; /* Évite de couper les paragraphes */
+            margin-bottom: 1rem;
+        }
+
+        @media print {
+            .pdf {
+                page-break-inside: avoid;
+                break-after: always; /* Force les sauts de page après chaque section */
+            }
+            .pdf-section {
+                overflow: visible; /* Permet d'afficher tout le contenu */
+            }
+        }
+
+
+    </style>
+</head>
+
+<div id="pdf-content-{{ devis.reference }}" class="pdf flex flex-col items-between justify-start p-4 w-full bg-white text-text-900 text-sm" style="width: 210mm; page-break-inside: avoid;">
+
+    <section id="top-section" class="flex items-start justify-between w-full mb-0 p-4 pb-0" style="page-break-inside: avoid;">
+        <div id="entreprise-adresse-section">
+            {% if data.entrepriseNom %}
+                <p>{{ data.entrepriseNom }}</p>
+                {% if data.entrepriseContact %}
+                    <p>{{ data.entrepriseContact }}</p>
+                {% endif %}
+                <p>{{ data.entrepriseAdresseRue }}</p>
+                <p>{{ data.entrepriseAdresseVille }}</p>
+            {% endif %}
+        </div>
+        <div class="flex gap-4">
+            <h1 class="text-4xl font-bold capitalize">{{ devis.reference }}</h1>
+        </div>
+    </section>
+
+    <section id="devis-details" class="flex flex-wrap items-start justify-between w-full mb-1 p-4" style="page-break-inside: avoid">
+        <div id="devis-infos" class="border rounded bg-primary px-2 flex flex-col items-between justify-start">
+            <div class="flex flex-wrap justify-between items-center gap-x-2">
+                <p>Référence: </p>
+                <p>{{ devis.reference }}</p>
+            </div>
+
+            <div class="flex flex-wrap justify-between items-center gap-x-2">
+                <p>Date du devis: </p>
+                <p>{{ data.updatedAtDate }}</p>
+            </div>
+
+            <div class="flex flex-wrap justify-between items-center gap-x-2">
+                <p>Date de début de la prestation: </p>
+                <p>{{ data.debutAtDate }}</p>
+            </div>
+
+            <div class="flex flex-wrap justify-between items-center gap-x-2">
+                <p>Date de validité: </p>
+                <p>{{ data.validite }}</p>
+            </div>
+
+            <div class="flex flex-wrap justify-between items-center gap-x-2">
+                <p>Contact client: </p>
+                <p>{{ data.contactClient }}</p>
+            </div>
+        </div>
+
+        <div id="infos-client">
+                <h2 class="underline mb-4">Destinataire :</h2>
+                <p class="capitalize"><span class="uppercase">{{ data.clientNom }}</span> {{ data.clientPrenom }}</p>
+                <p>{{ data.clientAdresseRue }}</p>
+                <p>{{ data.clientAdresseVille }}</p>
+        </div>
+    </section>
+
+    <section id="tc-section" class="p-4 flex flex-col items-start justify-start w-full mb-1">
+        <h2 class="underline mb-4">Termes et conditions</h2>
+        <div class="bg-primary rounded w-full min-h-32 p-4">{{ data.tc }}</div>
+    </section>
+
+    <section id="prestations-section" class="border flex flex-col flex-wrap flex-row justify-center m-4">
+        <div class="grid grid-cols-7 items-end justify-items-center border-b bg-primary w-full">
+            <p>Description</p>
+            <p>Quantité</p>
+            <p>Prix unitaire HT</p>
+            <p>Total HT</p>
+            <p>TVA %</p>
+            <p>TVA</p>
+            <p>Total TTC</p>
+            <p></p>
+        </div>
+
+        {% for prestation in data.prestations %}
+        <div style="page-break-inside: avoid " class="w-full p-2 grid grid-cols-7 gap-x-2 items-center justify-items-center border-none">
+        <p class="font-normal">{{ prestation.element}}</p>
+        <p class="block">{{ prestation.qty }}</p>
+        <p class="block">{{ prestation.prixHT}}</p>
+        <p class="block">{{ prestation.totalHT }}</p>
+        <p class="block">{{ prestation.tvaPercentage }} %</p>
+        <p class="block">{{ prestation.tva }}</p>
+        <p class="block font-bold">{{ prestation.totalTTC }}</p>
+        </div>
+        {% endfor %}
+    </section>
+
+    <section id="prix-section" class="grid grid-cols-2 gap-x-4 items-end justify-items-end ml-auto mb-8 p-4">
+        <div class="text-right">
+            <p>Total HT: </p>
+            <p>TVA: </p>
+            <p>Total TTC: </p>
+            {% if data.paidAtDate %}
+            <p class="underline">Payé le: </p>
+            {% endif %}
+        </div>
+        <div class="text-right">
+            <p>{{ data.prixHtCalcule }}</p>
+            <p>{{ data.tvaCalcule }}</p>
+            <p class="font-bold">{{ data.totalTTCCalcule }}</p>
+            {% if data.paidAtDate %}
+            <p> {{ data.paidAtDate}}</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <section id="bottom-section" class="flex items-start justify-between w-full p-4 text-xs">
+        <div id="entreprise-infos-section" style="page-break-inside: avoid">
+            <p>Siret: {{ devis.entreprise.siret }}</p>
+            {% if devis.entreprise.codeApe %}
+            <p>Code APE: {{ devis.entreprise.codeApe }}</p>
+            {% endif %}
+            {% if devis.entreprise.tvaIntracom %}
+             <p>Numéro de TVA intracommunautaire: {{ devis.entreprise.tvaIntracom }}</p>
+            {% endif %}
+        </div>
+        <div id="contact-section" style="page-break-inside: avoid">
+            {% if devis.entreprise.contact %}
+            <p class="capitalize">Contact: {{ devis.entreprise.contact }}</p>
+            {% endif %}
+            {% if devis.entreprise.web %}
+            <p><a href="{{ devis.entreprise.web }}" target="blank" class="underline">{{ devis.entreprise.web }}</a></p>
+            {% endif %}
+            {% if devis.entreprise.email %}
+            <p><a href="mailto:" {{ devis.entreprise.email }}>{{ devis.entreprise.email }}</a></p>
+            {% endif %}
+            {% if devis.entreprise.telephone1 %}
+            <p>Téléphone 1: {{ devis.entreprise.telephone1 }}</p>
+            {% endif %}
+            {% if devis.entreprise.telephone2 %}
+            <p>Téléphone2: {{ devis.entreprise.telephone2 }}</p>
+            {% endif %}
+        </div>
+    </section>
+</div>
+</html>
