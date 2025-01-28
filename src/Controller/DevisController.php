@@ -214,11 +214,6 @@ class DevisController extends AbstractController
     #[Route(
         path: '/api/devis/{id}/export', name: 'app_devis_export_pdf', defaults: ['_api_resource_class' => Devis::class,], methods: ['GET'],
     )]
-    #[OA\Parameter(
-        name: 'userId',
-        description: 'Id of the user to find',
-        in: 'query',
-    )]
     public function export_pdf(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, Devis $devis): Response
     {
         $user = $this->annuaire->getUser($request);
@@ -290,10 +285,11 @@ class DevisController extends AbstractController
             'dpi' => 300,
         ]);
 
+        $chromePath = $this->getParameter('kernel.project_dir') . '/var/google-chrome-stable';
         $converter->setLaunchOptions([
             'ignoreHTTPSErrors' => true,
             'headless' => true,
-            'executablePath' => '/usr/bin/google-chrome-stable',
+            'executablePath' => $chromePath,
             'args' => [
                 '--no-sandbox',
                 '--disable-web-security',
