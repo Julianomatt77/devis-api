@@ -285,7 +285,8 @@ class DevisController extends AbstractController
             'dpi' => 300,
         ]);
 
-        $chromePath = $this->getParameter('kernel.project_dir') . '/var/google-chrome-stable';
+//        $chromePath = $this->getParameter('kernel.project_dir') . '/var/google-chrome-stable';
+        $chromePath = '/usr/bin/google-chrome-stable';
         $converter->setLaunchOptions([
             'ignoreHTTPSErrors' => true,
             'headless' => true,
