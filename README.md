@@ -1,7 +1,7 @@
 # Devis-api
 
 - PHP 8.3
-- Symfony 7.1.5
+- Symfony 7.1.5 -> upgraded to 7.4 on 09/12/2025
 
 ## Installation
 
