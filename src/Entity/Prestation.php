@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\OpenApi\Model\RequestBody;
+use ApiPlatform\OpenApi\Model\Operation;
 use App\Controller\PrestationController;
 use App\Repository\PrestationRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,10 +20,57 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new GetCollection(uriTemplate: '/api/prestations', controller: PrestationController::class, name: 'app_prestations_all'),
-        new Post(uriTemplate: '/api/prestations', controller: PrestationController::class, denormalizationContext: ['groups' => ['prestation:write']], name: 'app_prestation_new'),
+        new Post(
+            uriTemplate: '/api/prestations',
+            denormalizationContext: ['groups' => ['prestation:write']],
+            name: 'app_prestation_new',
+            controller: PrestationController::class,
+            openapi: new Operation(
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'element' => ['type' => 'object', 'properties' => ['id' => ['type' => 'integer']]],
+                                    'qty' => ['type' => 'integer'],
+                                    'prixHT' => ['type' => 'integer'],
+                                    'tvaPercentage' => ['type' => 'integer'],
+                                    'devis' => ['type' => 'object', 'properties' => ['id' => ['type' => 'integer']]]
+                                ],
+                                'required' => ['element', 'qty', 'prixHT', 'tvaPercentage', 'devis']
+                            ]
+                        ]
+                    ])
+                )
+            )
+        ),
         new Get(uriTemplate: '/api/prestations/{id}', controller: PrestationController::class, denormalizationContext: ['groups' => ['prestation:write']], name: 'app_prestation_show'),
         new Delete(uriTemplate: '/api/prestations/{id}', controller: PrestationController::class, denormalizationContext: ['groups' => ['prestation:write']],name: 'app_prestation_delete'),
-        new Patch(uriTemplate: '/api/prestations/{id}', controller: PrestationController::class, denormalizationContext: ['groups' => ['prestation:write']], name: 'app_prestation_update'),
+        new Patch(
+            uriTemplate: '/api/prestations/{id}',
+            denormalizationContext: ['groups' => ['prestation:write']],
+            name: 'app_prestation_update',
+            controller: PrestationController::class,
+            openapi: new Operation(
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'element' => ['type' => 'object', 'properties' => ['id' => ['type' => 'integer']]],
+                                    'qty' => ['type' => 'integer'],
+                                    'prixHT' => ['type' => 'integer'],
+                                    'tvaPercentage' => ['type' => 'integer'],
+                                    'devis' => ['type' => 'object', 'properties' => ['id' => ['type' => 'integer']]]
+                                ]
+                            ]
+                        ]
+                    ])
+                )
+            )
+        ),
     ],
     formats: ["json"],
 )]
