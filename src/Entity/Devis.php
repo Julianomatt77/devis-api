@@ -9,6 +9,8 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\OpenApi\Model\RequestBody;
 use App\Controller\DevisController;
 use App\Repository\DevisRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,10 +23,80 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     operations: [
         new GetCollection(uriTemplate: '/api/devis', name: 'app_devis_all'),
-        new Post(uriTemplate: '/api/devis', denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_new'),
+        new Post(
+            uriTemplate: '/api/devis',
+            denormalizationContext: ['groups' => ['devis:write']],
+            name: 'app_devis_new',
+            controller: DevisController::class,
+            openapi: new Operation(
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'reference' => ['type' => 'string'],
+                                    'entreprise' => [
+                                        'type' => 'object',
+                                        'properties' => [
+                                            'id' => ['type' => 'integer']
+                                        ],
+                                        'required' => ['id']
+                                    ],
+                                    'client' => [
+                                        'type' => 'object',
+                                        'properties' => [
+                                            'id' => ['type' => 'integer']
+                                        ],
+                                        'required' => ['id']
+                                    ],
+                                    'tc' => ['type' => 'string'],
+                                    'dateDebutPrestation' => ['type' => 'string', 'format' => 'date']
+                                ],
+                                'required' => ['reference', 'entreprise', 'client']
+                            ]
+                        ]
+                    ])
+                )
+            )
+        ),
         new Get(uriTemplate: '/api/devis/{id}', denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_show'),
         new Delete(uriTemplate: '/api/devis/{id}',denormalizationContext: ['groups' => ['devis:write']],name: 'app_devis_delete'),
-        new Patch(uriTemplate: '/api/devis/{id}', denormalizationContext: ['groups' => ['devis:write']], name: 'app_devis_update'),
+        new Patch(
+            uriTemplate: '/api/devis/{id}',
+            denormalizationContext: ['groups' => ['devis:write']],
+            name: 'app_devis_update',
+            controller: DevisController::class,
+            openapi: new Operation(
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'reference' => ['type' => 'string'],
+                                    'entreprise' => [
+                                        'type' => 'object',
+                                        'properties' => [
+                                            'id' => ['type' => 'integer']
+                                        ]
+                                    ],
+                                    'client' => [
+                                        'type' => 'object',
+                                        'properties' => [
+                                            'id' => ['type' => 'integer']
+                                        ]
+                                    ],
+                                    'tc' => ['type' => 'string'],
+                                    'dateDebutPrestation' => ['type' => 'string', 'format' => 'date']
+                                ]
+                            ]
+                        ]
+                    ])
+                )
+            )
+        ),
+
         new Get(
             uriTemplate: '/api/devis/{id}/export',
             openapi: new Operation(
